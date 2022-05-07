@@ -27,9 +27,14 @@ const needle = require('needle');
 const config = require('./configuration');
 var settings = config.getSettings();
 
+// Write Title to console
+var figlet = require('figlet');
 
+console.log(figlet.textSync('Fantasy F1 Analyser', {
+    font: 'Standard',
+    horizontalLayout: 'fitted'
+}));
 
-console.log(chalk.whiteBright('Fantasy F1 Analyser'));
 
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
 let url = `${settings.baseUrl}${settings.year}/players`
