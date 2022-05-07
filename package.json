@@ -1,0 +1,44 @@
+{
+  "name": "fantasy-f1-analyzer",
+  "version": "1.0.0",
+  "description": "Retrieves the latest Fantasy F1 results and analyses all possible constructor and driver combinations to predict the optimum Fantasy F1 Team.",
+  "main": "ff1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": false,
+  "preferGlobal": true,
+  "bin": {
+    "ff1": "./ff1.js"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://MarkSMurphy@bitbucket.org/MarkSMurphy/fantasy-f1-analyzer.git"
+  },
+  "keywords": [
+    "Fantasy",
+    "F1",
+    "Analyzer",
+    "Analyser",
+    "Formula 1"
+  ],
+  "author": "Mark Murphy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://bitbucket.org/MarkSMurphy/fantasy-f1-analyzer/issues"
+  },
+  "homepage": "https://bitbucket.org/MarkSMurphy/fantasy-f1-analyzer#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "columnify": "^1.6.0",
+    "debug": "^4.3.4",
+    "needle": "^3.1.0",
+    "yargs": "^17.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0"
+  }
+}

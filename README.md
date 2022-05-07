@@ -1,29 +1,29 @@
-# README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+# Project Title
 
-### What is this repository for? ###
+Add badges from somewhere like: [shields.io](https://shields.io/)
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-### How do I get set up? ###
+A brief description of what this project does and who it's for
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## Installation
 
-### Contribution guidelines ###
+Install my-project with npm
 
-* Writing tests
-* Code review
-* Other guidelines
+```bash
+  npm install my-project
+  cd my-project
+```
 
-### Who do I talk to? ###
+## Usage/Examples
 
-* Repo owner or admin
-* Other community or team contact
+```javascript
+import Component from 'my-project'
+
+function App() {
+  return <Component />
+}
+```
