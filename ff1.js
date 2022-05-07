@@ -23,14 +23,13 @@ const columnify = require('columnify');
 // Initialise 'needle' HTTP client
 const needle = require('needle');
 
-// Initialise configuration
+// Initialise configuration and populate the settings object
 const config = require('./configuration');
-// Populate the settings object
 var settings = config.getSettings();
 
 
 
-console.log(chalk.whiteBright('Fantasy F1 Analysis'));
+console.log(chalk.whiteBright('Fantasy F1 Analyser'));
 
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
 let url = `${settings.baseUrl}${settings.year}/players`
@@ -50,6 +49,7 @@ needle(settings.httpMethod, url, settings.httpOptions)
 function processResponse(data) {
 
     let analysis = require('./analysis');
+    let formatting = require('./formatting');
 
     // Get details of constructors and drivers
     let constructors = analysis.getConstructors(data);
@@ -64,8 +64,8 @@ function processResponse(data) {
     // Iterate through Drivers
     drivers.forEach(element => {
         let details = {};
-        details.driver = analysis.applyTeamColours(element.display_name, element.team_abbreviation);
-        details.points = analysis.applyTeamColours(element.season_score, element.team_abbreviation);
+        details.driver = formatting.applyTeamColours(element.display_name, element.team_abbreviation);
+        details.points = formatting.applyTeamColours(element.season_score, element.team_abbreviation);
 
         // Save details into Current Standing object
         currentStanding.drivers.push(details);
@@ -74,8 +74,8 @@ function processResponse(data) {
     // Iterate through Constructors
     constructors.forEach(element => {
         let details = {};
-        details.constructor = analysis.applyTeamColours(element.display_name, element.team_abbreviation);
-        details.points = analysis.applyTeamColours(element.season_score, element.team_abbreviation);
+        details.constructor = formatting.applyTeamColours(element.display_name, element.team_abbreviation);
+        details.points = formatting.applyTeamColours(element.season_score, element.team_abbreviation);
 
         // Save details into Current Standing object
         currentStanding.constructors.push(details);
