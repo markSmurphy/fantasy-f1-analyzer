@@ -17,9 +17,6 @@ if (argv.debug) {
 // Initialise console colours
 const chalk = require('chalk');
 
-// Console output formatting for columns and colours
-const columnify = require('columnify');
-
 // Initialise 'needle' HTTP client
 const needle = require('needle');
 
@@ -39,14 +36,14 @@ console.log(figlet.textSync('Fantasy F1 Analyser', {
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
 let url = `${settings.baseUrl}${settings.year}/players`
 
-console.log(chalk.grey('Retrieving latest Fantasy F1 data ...'));
+console.log(chalk.grey('Retrieving latest Fantasy F1 data [' + url + '] ...'));
 needle(settings.httpMethod, url, settings.httpOptions)
     .then(function(response) {
         debug('HTTP response %s for [%s] received', response.status, url);
         return processResponse(response.body);
     })
     .catch(function(error) {
-        console.error('An error occurred when querying the Fantasy F1 API');
+        console.error('An error occurred while processing Fantasy F1 data');
         console.error('%s returned: %O', url, error);
     })
 
@@ -54,49 +51,20 @@ needle(settings.httpMethod, url, settings.httpOptions)
 function processResponse(data) {
 
     let analysis = require('./analysis');
-    let formatting = require('./formatting');
 
     // Get details of constructors and drivers
     let constructors = analysis.getConstructors(data);
     let drivers = analysis.getDrivers(data);
 
-    // Compile details of current standing
-    let currentStanding = {
-        drivers: [],
-        constructors: []
+    // Compile detailed F1 dataset
+    let f1Dataset = {
+        drivers: drivers,
+        constructors: constructors
     };
 
-    // Iterate through Drivers
-    drivers.forEach(element => {
-        let details = {};
-        details.driver = formatting.applyTeamColours(element.display_name, element.team_abbreviation);
-        details.points = formatting.applyTeamColours(element.season_score, element.team_abbreviation);
+    // Display summary of current standings
+    let summary = require('./summary');
+    summary.displayCurrentStandings(f1Dataset);
 
-        // Save details into Current Standing object
-        currentStanding.drivers.push(details);
-    });
-
-    // Iterate through Constructors
-    constructors.forEach(element => {
-        let details = {};
-        details.constructor = formatting.applyTeamColours(element.display_name, element.team_abbreviation);
-        details.points = formatting.applyTeamColours(element.season_score, element.team_abbreviation);
-
-        // Save details into Current Standing object
-        currentStanding.constructors.push(details);
-    });
-
-
-    // Display summary of current standing
-    console.log(chalk.whiteBright('---- Drivers Standings ----\r\n'))
-    let driversColumns = columnify(currentStanding.drivers, {
-        columnSplitter: ' | ',
-    });
-    console.log(driversColumns + '\r\n\r\n');
-
-    console.log(chalk.whiteBright('---- Constructors Standings ----\r\n'))
-    let constructorsColumns = columnify(currentStanding.constructors, {
-        columnSplitter: ' | ',
-    });
-    console.log(constructorsColumns);
+    analysis.performAnalysis(f1Dataset, settings);
 }
