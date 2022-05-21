@@ -6,8 +6,8 @@ debug('Command line arguments: %O', process.argv);
 
 // Command line options parser
 const argv = require('yargs')
-.help(false)
-.argv;
+    .help(false)
+    .argv;
 
 // check if "debug" mode is enabled via the command line
 if (argv.debug) {
@@ -38,11 +38,11 @@ let url = `${settings.baseUrl}${settings.year}/players`
 
 console.log(chalk.grey('Retrieving latest Fantasy F1 data [' + url + '] ...'));
 needle(settings.httpMethod, url, settings.httpOptions)
-    .then(function(response) {
+    .then(function (response) {
         debug('HTTP response %s for [%s] received', response.status, url);
         return processResponse(response.body);
     })
-    .catch(function(error) {
+    .catch(function (error) {
         console.error('An error occurred while processing Fantasy F1 data');
         console.error('%s returned: %O', url, error);
     })

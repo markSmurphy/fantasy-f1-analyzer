@@ -9,52 +9,52 @@ function applyTeamColours(text, team_abbreviation) {
 
    switch (team_abbreviation.toUpperCase()) {
       case 'MER':
-            response = chalk.cyanBright(text);
+         response = chalk.cyanBright(text);
          break;
 
       case 'AST':
-            response = chalk.greenBright(text);
+         response = chalk.greenBright(text);
          break;
 
       case 'RED':
-            response = chalk.blue(text);
+         response = chalk.blue(text);
          break;
 
       case 'HAA':
-            response = chalk.whiteBright(text);
+         response = chalk.whiteBright(text);
          break;
 
       case 'ALP':
-            response = chalk.blueBright(text);
+         response = chalk.blueBright(text);
          break;
 
       case 'FER':
-            response = chalk.red(text);
+         response = chalk.red(text);
          break;
 
       case 'ALT':
-            response = chalk.grey(text);
+         response = chalk.grey(text);
          break;
 
       case 'WIL':
-            response = chalk.cyan(text);
+         response = chalk.cyan(text);
          break;
 
       case 'MCL':
-            response = chalk.yellow(text);
-      break;
+         response = chalk.yellow(text);
+         break;
 
       case 'ALF':
-            response = chalk.magenta(text);
+         response = chalk.magenta(text);
          break;
 
       default:
-            // Return the original text unaltered by default
-            response = text;
+         // Return the original text unaltered by default
+         response = text;
          break;
    }
 
-   return(response);
+   return (response);
 }
 
-module.exports = {applyTeamColours};
+module.exports = { applyTeamColours };

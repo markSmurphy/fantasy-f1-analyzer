@@ -3,8 +3,8 @@ debug('Entry: [%s]', __filename);
 
 // Command line options parser
 var argv = require('yargs')
-.help(false)
-.argv;
+    .help(false)
+    .argv;
 
 // Initialise console colours
 const chalk = require('chalk');
@@ -15,11 +15,11 @@ https://fantasy-api.formula1.com/f1/2022/players
 https://fantasy-api.formula1.com/f1/2022/circuits
  */
 
-function  getSettings() {
+function getSettings() {
     debug('Entry::getSettings()');
 
     // Get the year, which features in the endpoint's URL path
-    let date =  new Date().getFullYear();
+    let date = new Date().getFullYear();
 
     let settings = {
         baseUrl: 'https://fantasy-api.formula1.com/f1/',
@@ -54,8 +54,8 @@ function  getSettings() {
 
     } catch (error) {
         console.error('An error occurred in getSettings(): %O', error);
-        return(settings);
+        return (settings);
     }
 }
 
-module.exports = {getSettings};
+module.exports = { getSettings };

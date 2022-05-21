@@ -15,7 +15,7 @@ function getConstructors(data) {
       }
    });
    debug('getConstructors() found %s constructors', constructors.length);
-   return(constructors);
+   return (constructors);
 }
 
 // Extract all Drivers from the raw data
@@ -32,7 +32,7 @@ function getDrivers(data) {
       }
    });
    debug('getDrivers() found %s drivers', drivers.length);
-   return(drivers);
+   return (drivers);
 }
 
 function initCurrentTeamObject() {
@@ -47,10 +47,10 @@ function initCurrentTeamObject() {
       drivers: []
    };
 
-   return(currentTeam);
+   return (currentTeam);
 }
 
-function assessCurrentTeam(currentTeam, budget){
+function assessCurrentTeam(currentTeam, budget) {
    // Add up total points and total price
    let totalPoints = currentTeam.constructor.points;
    let totalPrice = currentTeam.constructor.price;
@@ -68,7 +68,7 @@ function assessCurrentTeam(currentTeam, budget){
 
 
 
-   return(result);
+   return (result);
 }
 
 function performAnalysis(fullDataset, settings) {
@@ -103,4 +103,4 @@ function performAnalysis(fullDataset, settings) {
    });
 }
 
-module.exports = {getConstructors, getDrivers, performAnalysis};
+module.exports = { getConstructors, getDrivers, performAnalysis };
