@@ -1,6 +1,10 @@
 const debug = require('debug')('fantasy-f1-analyzer-analysis');
 debug('Entry: [%s]', __filename);
 
+
+// Import terminal spinner library
+const ora = require('ora');
+
 // Extract all Constructors from the raw data
 function getConstructors(data) {
    debug('getConstructors::Entry');
@@ -72,6 +76,11 @@ function assessCurrentTeam(currentTeam, budget) {
 }
 
 function performAnalysis(fullDataset, settings) {
+   const startTime = Date.now(); // Record the start time
+
+   // Create and start the progress spinner
+   const spinnerProgress = ora('Initialising ...').start();
+
 
    // Create a new Current Team object
    let currentTeam = initCurrentTeamObject();
@@ -96,11 +105,19 @@ function performAnalysis(fullDataset, settings) {
          currentTeam.drivers.push(driver);
       }
 
+      // Update progress text with current team being analysed
+      spinnerProgress.text('Analysing [' + currentTeam.constructor.abbreviation + ': ' + currentTeam.drivers.join(' ! ') + ']');
       let result = assessCurrentTeam(currentTeam, settings.budget);
 
       console.log(result);
 
    });
+
+   const endTime = Date.now(); // Record the end time
+   const duration = Math.ceil((endTime - startTime)/1000); // Obtain the duration in seconds
+
+   // Stop the progress spinner
+   spinnerProgress.succeed('Analysis Completed in ' + duration + ' seconds');
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };
