@@ -1,8 +1,11 @@
+const debug = require('debug')('fantasy-f1-analyzer-statistics');
+debug('Entry: [%s]', __filename);
+
 function init() {
    // Initialise a statistics object
    let statisticsObject = {
       counters: {
-         total: 0,
+         totalTeams: 0,
          overBudget: 0
       }
    };
@@ -11,9 +14,10 @@ function init() {
    return (statisticsObject);
 }
 
-function incrementTotal(statisticsObject) {
-   // Increment the `total` counter by one
-   statisticsObject.counters.total = + 1;
+function incrementTotalTeams(statisticsObject) {
+   // Increment the `totalTeams` counter by one
+   statisticsObject.counters.totalTeams = + 1;
+   debug('TotalTeams count incremented by 1 to %i', statisticsObject.counters.totalTeams);
    // Return the update statistics object
    return (statisticsObject);
 }
@@ -21,6 +25,7 @@ function incrementTotal(statisticsObject) {
 function incrementOverBudget(statisticsObject) {
    // Increment the `total` counter by one
    statisticsObject.counters.overBudget = + 1;
+   debug('OverBudget count incremented by 1 to %i', statisticsObject.counters.overBudget);
    // Return the update statistics object
    return (statisticsObject);
 }
@@ -35,4 +40,4 @@ function getOverBudget(statisticsObject) {
    return (statisticsObject.counters.overBudget);
 }
 
-module.exports = { init, incrementTotal, incrementOverBudget, getTotal, getOverBudget };
+module.exports = { init, incrementTotalTeams, incrementOverBudget, getTotal, getOverBudget };

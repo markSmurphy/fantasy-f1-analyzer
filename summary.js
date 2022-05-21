@@ -1,3 +1,6 @@
+const debug = require('debug')('fantasy-f1-analyzer-summary');
+debug('Entry: [%s]', __filename);
+
 // Formatting of text to F1 constructor team colours
 const formatting = require('./formatting');
 
@@ -8,7 +11,7 @@ const columnify = require('columnify');
 const chalk = require('chalk');
 
 function displayCurrentStandings(data) {
-
+    debug('displayCurrentStandings() :: Entry');
     let currentStandings = {
         drivers: [],
         constructors: []
@@ -23,6 +26,7 @@ function displayCurrentStandings(data) {
         // Save details into Current Standing object
         currentStandings.drivers.push(details);
     });
+    debug('Got %i drivers', currentStandings.drivers.length);
 
     // Iterate through Constructors
     data.constructors.forEach(element => {
@@ -33,7 +37,7 @@ function displayCurrentStandings(data) {
         // Save details into Current Standing object
         currentStandings.constructors.push(details);
     });
-
+    debug('Got %i constructors', currentStandings.constructors.length);
 
     // Display summary of current standing
     console.log(chalk.whiteBright('---- Drivers Standings ----\r\n'))
