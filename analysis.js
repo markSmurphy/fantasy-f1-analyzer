@@ -114,7 +114,7 @@ function performAnalysis(fullDataset, settings) {
    });
 
    const endTime = Date.now(); // Record the end time
-   const duration = Math.ceil((endTime - startTime)/1000); // Obtain the duration in seconds
+   const duration = Math.ceil((endTime - startTime) / 1000); // Obtain the duration in seconds
 
    // Stop the progress spinner
    spinnerProgress.succeed('Analysis Completed in ' + duration + ' seconds');
