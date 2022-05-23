@@ -1,9 +1,12 @@
 const debug = require('debug')('fantasy-f1-analyzer-analysis');
 debug('Entry: [%s]', __filename);
 
+// console colours
 const chalk = require('chalk');
+
 // Import terminal spinner library
 const ora = require('ora');
+
 // Create and start the progress spinner
 const spinnerProgress = ora().start();
 
@@ -13,6 +16,9 @@ const formatting = require('./formatting');
 // Platform independent end-of-line character
 const newLine = require('os').EOL;
 
+// Console output formatting for columns and colours
+const columnify = require('columnify');
+
 // Initialise statistics object
 const statistics = require('./statistics');
 const stats = statistics.initialise();
@@ -21,6 +27,12 @@ const bestTeam = {
    points: 0,
    teams: []
 };
+
+/* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
+function round(number, decimalPlaces){ // Rounds a decimal number to a specified precision
+   const factorOfTen = Math.pow(10, decimalPlaces);
+   return(Math.round(number * factorOfTen) / factorOfTen);
+}
 
 function getConstructors(f1data) { // Extract all Constructors from the raw data
    debug('getConstructors::Entry');
@@ -114,6 +126,9 @@ function tallyCurrentTeam(currentTeam) {
       totalPrice += driver.price;
    })
 
+   // Round the total price to one decimal place
+   totalPrice = round(totalPrice, 1);
+
    let result = {
       totalPoints: totalPoints,
       totalPrice: totalPrice,
@@ -166,19 +181,38 @@ function analyseTeam(currentTeam) {
       // Team drivers are invalid (i.e. not enough of them or contains duplicates)
       stats.counters.invalidTeams++;
    }
-
 }
 
 function displayBestTeam(){
    console.log(chalk.underline('Optimal team:'));
    bestTeam.teams.forEach(team => {
+      let bestTeamOutput = []; // Initialise output array
+
+      bestTeamOutput.push({ // Add Constructor
+         name: formatting.applyTeamColours(team.constructor.display_name, team.constructor.team_abbreviation),
+         points: formatting.applyTeamColours(team.constructor.season_score, team.constructor.team_abbreviation),
+         cost: formatting.applyTeamColours(team.constructor.price, team.constructor.team_abbreviation)
+      });
+
+      team.drivers.forEach(driver => { // Add Drivers
+         bestTeamOutput.push({ // Add Constructor
+            name: formatting.applyTeamColours(driver.display_name, driver.team_abbreviation),
+            points: formatting.applyTeamColours(driver.season_score, driver.team_abbreviation),
+            cost: formatting.applyTeamColours(driver.price, driver.team_abbreviation)
+         });
+      });
+
+      // Add totals row
+      bestTeamOutput.push({
+         name: '',
+         points: chalk.bold(team.tallyResults.totalPoints),
+         cost: chalk.bold(team.tallyResults.totalPrice)
+      });
+
+      let bestTeamColumns = columnify(bestTeamOutput);
+
+      console.log(bestTeamColumns);
       console.log(newLine);
-      console.log(`Constructor: ${formatting.applyTeamColours(team.constructor.display_name)}`);
-      console.log(`Drivers:     ${formatting.applyTeamColours(team.drivers[0].display_name)}`);
-      console.log(`             ${formatting.applyTeamColours(team.drivers[1].display_name)}`);
-      console.log(`             ${formatting.applyTeamColours(team.drivers[2].display_name)}`);
-      console.log(`             ${formatting.applyTeamColours(team.drivers[3].display_name)}`);
-      console.log(`             ${formatting.applyTeamColours(team.drivers[4].display_name)}`);
    });
 }
 
@@ -190,6 +224,8 @@ function performAnalysis(f1data) {
 
    // Analyse each constructor against all driver lineups
    f1data.constructors.forEach(constructor => {
+
+      currentTeam = initCurrentTeamObject();
 
       // Populate constructor properties into Current Team
       currentTeam.constructor = constructor;
@@ -230,7 +266,7 @@ function performAnalysis(f1data) {
    // Stop the progress spinner
    spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${durationSeconds} seconds`);
 
-   displayBestTeam(bestTeam);
+   displayBestTeam();
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };

@@ -40,13 +40,13 @@ function displayCurrentStandings(data) {
     debug('Got %i constructors', currentStandings.constructors.length);
 
     // Display summary of current standing
-    console.log(chalk.whiteBright('---- Drivers Standings ----\r\n'))
+    console.log(chalk.whiteBright('---- Drivers ----\r\n'))
     let driversColumns = columnify(currentStandings.drivers, {
         columnSplitter: ' | ',
     });
     console.log(driversColumns + '\r\n\r\n');
 
-    console.log(chalk.whiteBright('---- Constructors Standings ----\r\n'))
+    console.log(chalk.whiteBright('---- Constructors ----\r\n'))
     let constructorsColumns = columnify(currentStandings.constructors, {
         columnSplitter: ' | ',
     });
