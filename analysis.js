@@ -144,6 +144,7 @@ function analyseTeam(currentTeam) {
    // Update progress text with current team being analysed
    let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
    spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' ! ');
+   spinnerProgress.render();
 
    // Ensure the team's driver lineup is valid
    if (validateDrivers(currentTeam.drivers)) {
