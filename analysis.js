@@ -63,7 +63,7 @@ function initCurrentTeamObject() {
          points: 0,
          abbreviation: ''
       },
-      drivers: []
+      drivers: Array(5)
    };
 
    return (currentTeam);
@@ -143,7 +143,8 @@ function analyseTeam(currentTeam) {
 
    // Update progress text with current team being analysed
    let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
-   spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' ! ');
+   let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+   spinnerProgress.text = spinnerText;
    spinnerProgress.render();
 
    // Ensure the team's driver lineup is valid
@@ -184,23 +185,23 @@ function performAnalysis(f1data) {
 
       for (let driver1 = 0; driver1 <= 15; driver1++) {
          // Populate each driver in turn into the first driver slot
-         currentTeam.drivers.push(f1data.drivers[driver1]);
+         currentTeam.drivers[0] = f1data.drivers[driver1];
          analyseTeam(currentTeam);
 
          for (let driver2 = driver1 + 1; driver2 <= 16; driver2++) {
-            currentTeam.drivers.push(f1data.drivers[driver2]);
+            currentTeam.drivers[1] = f1data.drivers[driver2];
             analyseTeam(currentTeam);
 
             for (let driver3 = driver2 + 1; driver3 <= 17; driver3++) {
-               currentTeam.drivers.push(f1data.drivers[driver3]);
+               currentTeam.drivers[2] = f1data.drivers[driver3];
                analyseTeam(currentTeam);
 
                for (let driver4 = driver3 + 1; driver4 <= 18; driver4++) {
-                  currentTeam.drivers.push(f1data.drivers[driver4]);
+                  currentTeam.drivers[3] = f1data.drivers[driver4];
                   analyseTeam(currentTeam);
 
                   for (let driver5 = driver4 + 1; driver5 <= 19; driver5++) {
-                     currentTeam.drivers.push(f1data.drivers[driver5]);
+                     currentTeam.drivers[4] = f1data.drivers[driver5];
                      analyseTeam(currentTeam);
                   }
                }
