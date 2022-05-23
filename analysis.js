@@ -4,7 +4,7 @@ debug('Entry: [%s]', __filename);
 // Import terminal spinner library
 const ora = require('ora');
 // Create and start the progress spinner
-const spinnerProgress = ora('Initialising ...').start();
+const spinnerProgress = ora().start();
 
 // Import Utilities library
 //const utils = require('./utils');
@@ -217,7 +217,6 @@ function performAnalysis(f1data) {
    // Stop the progress spinner
    spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${durationSeconds} seconds`);
 
-   console.log('Stats: %O', stats);
    console.log('Best Team: %J', bestTeam);
 }
 
