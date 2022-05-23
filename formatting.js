@@ -5,56 +5,60 @@ debug('Entry: [%s]', __filename);
 const chalk = require('chalk');
 
 function applyTeamColours(text, team_abbreviation) {
-   let response = '';
+   // Handle missing team_abbreviation
+   if (team_abbreviation == undefined) {
+      return(text);
+   } else {
+      let response = '';
 
-   switch (team_abbreviation.toUpperCase()) {
-      case 'MER':
-         response = chalk.cyanBright(text);
-         break;
+      switch (team_abbreviation.toUpperCase()) {
+         case 'MER':
+            response = chalk.cyanBright(text);
+            break;
 
-      case 'AST':
-         response = chalk.greenBright(text);
-         break;
+         case 'AST':
+            response = chalk.greenBright(text);
+            break;
 
-      case 'RED':
-         response = chalk.blue(text);
-         break;
+         case 'RED':
+            response = chalk.blue(text);
+            break;
 
-      case 'HAA':
-         response = chalk.whiteBright(text);
-         break;
+         case 'HAA':
+            response = chalk.whiteBright(text);
+            break;
 
-      case 'ALP':
-         response = chalk.blueBright(text);
-         break;
+         case 'ALP':
+            response = chalk.blueBright(text);
+            break;
 
-      case 'FER':
-         response = chalk.red(text);
-         break;
+         case 'FER':
+            response = chalk.red(text);
+            break;
 
-      case 'ALT':
-         response = chalk.grey(text);
-         break;
+         case 'ALT':
+            response = chalk.grey(text);
+            break;
 
-      case 'WIL':
-         response = chalk.cyan(text);
-         break;
+         case 'WIL':
+            response = chalk.cyan(text);
+            break;
 
-      case 'MCL':
-         response = chalk.yellow(text);
-         break;
+         case 'MCL':
+            response = chalk.yellow(text);
+            break;
 
-      case 'ALF':
-         response = chalk.magenta(text);
-         break;
+         case 'ALF':
+            response = chalk.magenta(text);
+            break;
 
-      default:
-         // Return the original text unaltered by default
-         response = text;
-         break;
+         default:
+            // Return the original text unaltered by default
+            response = text;
+            break;
+      }
+      return (response);
    }
-
-   return (response);
 }
 
 module.exports = { applyTeamColours };
