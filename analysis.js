@@ -7,7 +7,7 @@ const ora = require('ora');
 const spinnerProgress = ora('Initialising ...').start();
 
 // Import Utilities library
-const utils = require('./utils');
+//const utils = require('./utils');
 
 // Formatting of text to F1 constructor team colours
 const formatting = require('./formatting');
@@ -212,13 +212,13 @@ function performAnalysis(f1data) {
 
    const endTime = Date.now(); // Record the end time
    const durationSeconds = Math.ceil((endTime - startTime) / 1000); // Obtain the duration in seconds
-   const duration = utils.secondsToHms(durationSeconds);
+   //const duration = utils.secondsToHms(durationSeconds);
 
    // Stop the progress spinner
-   spinnerProgress.succeed('Analysis completed in ' + duration);
+   spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${durationSeconds} seconds`);
 
    console.log('Stats: %O', stats);
-   console.log('Best Team: %O', bestTeam);
+   console.log('Best Team: %J', bestTeam);
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };
