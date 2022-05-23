@@ -1,18 +1,34 @@
 const debug = require('debug')('fantasy-f1-analyzer-analysis');
 debug('Entry: [%s]', __filename);
 
-
 // Import terminal spinner library
 const ora = require('ora');
+// Create and start the progress spinner
+const spinnerProgress = ora('Initialising ...').start();
 
-// Extract all Constructors from the raw data
-function getConstructors(data) {
+// Import Utilities library
+const utils = require('./utils');
+
+// Formatting of text to F1 constructor team colours
+const formatting = require('./formatting');
+
+// Initialise statistics object
+const statistics = require('./statistics');
+const stats = statistics.initialise();
+
+const bestTeam = {
+   points: 0,
+   teams: []
+};
+
+
+function getConstructors(f1data) { // Extract all Constructors from the raw data
    debug('getConstructors::Entry');
    // Initialise constructors array
    let constructors = [];
 
    // Iterate through *all* data elements
-   data.players.forEach(element => {
+   f1data.players.forEach(element => {
       // If it's a constructor then add it to the array
       if (element.is_constructor === true) {
          constructors.push(element);
@@ -22,14 +38,13 @@ function getConstructors(data) {
    return (constructors);
 }
 
-// Extract all Drivers from the raw data
-function getDrivers(data) {
+function getDrivers(f1data) { // Extract all Drivers from the raw data
    debug('getDrivers::Entry');
    // Initialise drivers array
    let drivers = [];
 
    // Iterate through *all* data elements
-   data.players.forEach(element => {
+   f1data.players.forEach(element => {
       // If it's *not* a constructor then it's a drivers, so  add it to the array
       if (element.is_constructor === false) {
          drivers.push(element);
@@ -40,7 +55,7 @@ function getDrivers(data) {
 }
 
 function initCurrentTeamObject() {
-   // Create `Current Team` object
+   // Return a new `Current Team` object
    let currentTeam = {
       constructor: {
          name: '',
@@ -54,70 +69,154 @@ function initCurrentTeamObject() {
    return (currentTeam);
 }
 
-function assessCurrentTeam(currentTeam, budget) {
+function doesArrayHaveDuplicates(sourceArray) {
+   let duplicates = []; // Initialise array to hold copy of duplicates
+   sourceArray.forEach((el, i) => { // Loop through array
+      sourceArray.forEach((element, index) => { // Loop through whole array once per element in array
+         if (i === index) return null; // Make sure we're not comparing the same element
+         if (element.display_name === el.display_name) { // Elements are different, so do they share the same display name?
+            if (!duplicates.includes(el)) duplicates.push(el); // The same display name occurs in two elements. Make a copy of the duplicate
+         }
+      });
+   });
+
+   return (duplicates.length > 0 ? true : false); // Return `true` if we have found any duplicates
+}
+
+function validateDrivers(drivers) {
+   // Make sure that `drivers` is an array with five unique members
+   if (Array.isArray(drivers)) {
+      // It is an array ...
+      if (drivers.length === 5) {
+         // It does have five members
+         if (doesArrayHaveDuplicates(drivers)) {
+            // There are duplicate drivers
+            return (false);
+         } else {
+            // There are *no* duplicates
+            return (true);
+         }
+      } else {
+         return (false);
+      }
+   } else {
+      return (false);
+   }
+}
+
+function tallyCurrentTeam(currentTeam) {
    // Add up total points and total price
-   let totalPoints = currentTeam.constructor.points;
+   let totalPoints = currentTeam.constructor.season_score;
    let totalPrice = currentTeam.constructor.price;
 
    currentTeam.drivers.forEach(driver => {
-      totalPoints += driver.points;
+      totalPoints += driver.season_score;
       totalPrice += driver.price;
    })
 
    let result = {
       totalPoints: totalPoints,
       totalPrice: totalPrice,
-      overBudget: totalPrice > budget ? true : false
+      overBudget: totalPrice > global.settings.budgetCap ? true : false
    }
-
-
 
    return (result);
 }
 
-function performAnalysis(fullDataset, settings) {
+function registerTeam(currentTeam) {
+   // Check if we're replacing the existing best team, or joining it
+
+   if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
+      bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
+   }
+
+   if (currentTeam.tallyResults.totalPoints > bestTeam.points) {   // We have a team with a better points total
+      bestTeam.points = currentTeam.tallyResults.totalPoints;      // Replace the best points total
+      bestTeam.teams = [];                                         // Remove existing best team(s)
+      bestTeam.teams.push(currentTeam);                            // Record new best team
+   }
+}
+
+function analyseTeam(currentTeam) {
+   // Increment total count
+   stats.counters.totalTeams++;
+
+   // Update progress text with current team being analysed
+   let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
+   spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' ! ');
+
+   // Ensure the team's driver lineup is valid
+   if (validateDrivers(currentTeam.drivers)) {
+      stats.counters.analysedTeams++;
+      let tallyResults = tallyCurrentTeam(currentTeam);
+
+      if (tallyResults.overBudget) { // Check if the team was over budget
+         stats.counters.overBudget++;
+      } else {
+         // Team is within budget
+         if (tallyResults.totalPoints >= bestTeam.points) {
+            // We've got a contender for best team. Append the results and process its potential
+            currentTeam.tallyResults = tallyResults;
+            registerTeam(currentTeam);
+         }
+      }
+   } else {
+      // Team drivers are invalid (i.e. not enough of them or contains duplicates)
+      stats.counters.invalidTeams++;
+   }
+
+}
+
+function performAnalysis(f1data) {
    const startTime = Date.now(); // Record the start time
-
-   // Create and start the progress spinner
-   const spinnerProgress = ora('Initialising ...').start();
-
 
    // Create a new Current Team object
    let currentTeam = initCurrentTeamObject();
 
    // Analyse each constructor against all driver lineups
-   fullDataset.constructors.forEach(constructor => {
+   f1data.constructors.forEach(constructor => {
 
       // Populate constructor properties into Current Team
-      currentTeam.constructor.name = constructor.display_name;
-      currentTeam.constructor.price = constructor.price;
-      currentTeam.constructor.points = constructor.season_score;
-      currentTeam.constructor.abbreviation = constructor.team_abbreviation;
+      currentTeam.constructor = constructor;
+      // Initialise array of team drivers
+      currentTeam.drivers = [];
 
-      // Add initial driver lineup (1 to 5) to current team
-      for (let i = 0; i <= 4; i++) {
-         let driver = {
-            name: fullDataset.drivers[i].display_name,
-            price: fullDataset.drivers[i].price,
-            points: fullDataset.drivers[i].season_score
+      for (let driver1 = 0; driver1 <= 15; driver1++) {
+         // Populate each driver in turn into the first driver slot
+         currentTeam.drivers.push(f1data.drivers[driver1]);
+         analyseTeam(currentTeam);
+
+         for (let driver2 = driver1 + 1; driver2 <= 16; driver2++) {
+            currentTeam.drivers.push(f1data.drivers[driver2]);
+            analyseTeam(currentTeam);
+
+            for (let driver3 = driver2 + 1; driver3 <= 17; driver3++) {
+               currentTeam.drivers.push(f1data.drivers[driver3]);
+               analyseTeam(currentTeam);
+
+               for (let driver4 = driver3 + 1; driver4 <= 18; driver4++) {
+                  currentTeam.drivers.push(f1data.drivers[driver4]);
+                  analyseTeam(currentTeam);
+
+                  for (let driver5 = driver4 + 1; driver5 <= 19; driver5++) {
+                     currentTeam.drivers.push(f1data.drivers[driver5]);
+                     analyseTeam(currentTeam);
+                  }
+               }
+            }
          }
-
-         currentTeam.drivers.push(driver);
       }
-
-      // Update progress text with current team being analysed
-      spinnerProgress.text('Analysing [' + currentTeam.constructor.abbreviation + ': ' + currentTeam.drivers.join(' ! ') + ']');
-      let result = assessCurrentTeam(currentTeam, settings.budget);
-
-      console.log(result);
-
    });
 
    const endTime = Date.now(); // Record the end time
-   const duration = Math.ceil((endTime - startTime) / 1000); // Obtain the duration in seconds
+   const durationSeconds = Math.ceil((endTime - startTime) / 1000); // Obtain the duration in seconds
+   const duration = utils.secondsToHms(durationSeconds);
 
    // Stop the progress spinner
-   spinnerProgress.succeed('Analysis Completed in ' + duration + ' seconds');
+   spinnerProgress.succeed('Analysis completed in ' + duration);
+
+   console.log('Stats: %O', stats);
+   console.log('Best Team: %O', bestTeam);
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };

@@ -24,7 +24,7 @@ function getSettings() {
     let settings = {
         baseUrl: 'https://fantasy-api.formula1.com/f1/',
         year: date.toString(),
-        budget: 100,
+        budgetCap: 100,
         verbose: false,
         httpMethod: 'GET',
         httpOptions: {}

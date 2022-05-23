@@ -20,9 +20,9 @@ const chalk = require('chalk');
 // Initialise 'needle' HTTP client
 const needle = require('needle');
 
-// Initialise configuration and populate the settings object
+// Initialise configuration and populate the global settings object
 const config = require('./configuration');
-var settings = config.getSettings();
+global.settings = config.getSettings();
 
 // Write Title to console
 var figlet = require('figlet');
@@ -34,10 +34,10 @@ console.log(figlet.textSync('Fantasy F1 Analyser', {
 
 
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
-let url = `${settings.baseUrl}${settings.year}/players`
+let url = `${global.settings.baseUrl}${global.settings.year}/players`
 
 console.log(chalk.grey('Retrieving latest Fantasy F1 data [' + url + '] ...'));
-needle(settings.httpMethod, url, settings.httpOptions)
+needle(global.settings.httpMethod, url, global.settings.httpOptions)
     .then(function (response) {
         debug('HTTP response %s for [%s] received', response.status, url);
         return processResponse(response.body);
@@ -57,14 +57,14 @@ function processResponse(data) {
     let drivers = analysis.getDrivers(data);
 
     // Compile detailed F1 dataset
-    let f1Dataset = {
+    let f1dataset = {
         drivers: drivers,
         constructors: constructors
     };
 
     // Display summary of current standings
     let summary = require('./summary');
-    summary.displayCurrentStandings(f1Dataset);
+    summary.displayCurrentStandings(f1dataset);
 
-    analysis.performAnalysis(f1Dataset, settings);
+    analysis.performAnalysis(f1dataset);
 }
