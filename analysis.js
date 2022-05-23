@@ -1,16 +1,17 @@
 const debug = require('debug')('fantasy-f1-analyzer-analysis');
 debug('Entry: [%s]', __filename);
 
+const chalk = require('chalk');
 // Import terminal spinner library
 const ora = require('ora');
 // Create and start the progress spinner
 const spinnerProgress = ora().start();
 
-// Import Utilities library
-//const utils = require('./utils');
-
 // Formatting of text to F1 constructor team colours
 const formatting = require('./formatting');
+
+// Platform independent end-of-line character
+const newLine = require('os').EOL;
 
 // Initialise statistics object
 const statistics = require('./statistics');
@@ -20,7 +21,6 @@ const bestTeam = {
    points: 0,
    teams: []
 };
-
 
 function getConstructors(f1data) { // Extract all Constructors from the raw data
    debug('getConstructors::Entry');
@@ -169,6 +169,19 @@ function analyseTeam(currentTeam) {
 
 }
 
+function displayBestTeam(){
+   console.log(chalk.underline('Optimal team:'));
+   bestTeam.teams.forEach(team => {
+      console.log(newLine);
+      console.log(`Constructor: ${formatting.applyTeamColours(team.constructor.display_name)}`);
+      console.log(`Drivers:     ${formatting.applyTeamColours(team.drivers[0].display_name)}`);
+      console.log(`             ${formatting.applyTeamColours(team.drivers[1].display_name)}`);
+      console.log(`             ${formatting.applyTeamColours(team.drivers[2].display_name)}`);
+      console.log(`             ${formatting.applyTeamColours(team.drivers[3].display_name)}`);
+      console.log(`             ${formatting.applyTeamColours(team.drivers[4].display_name)}`);
+   });
+}
+
 function performAnalysis(f1data) {
    const startTime = Date.now(); // Record the start time
 
@@ -217,7 +230,7 @@ function performAnalysis(f1data) {
    // Stop the progress spinner
    spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${durationSeconds} seconds`);
 
-   console.log('Best Team: %J', bestTeam);
+   displayBestTeam(bestTeam);
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };
