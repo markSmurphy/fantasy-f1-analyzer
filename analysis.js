@@ -117,13 +117,16 @@ function validateDrivers(drivers) {
 }
 
 function tallyCurrentTeam(currentTeam) {
+   let prices = [];
    // Add up total points and total price
    let totalPoints = currentTeam.constructor.season_score;
    let totalPrice = currentTeam.constructor.price;
+   prices.push(currentTeam.constructor.price);
 
    currentTeam.drivers.forEach(driver => {
       totalPoints += driver.season_score;
       totalPrice += driver.price;
+      prices.push(driver.price);
    })
 
    // Round the total price to one decimal place
@@ -132,19 +135,20 @@ function tallyCurrentTeam(currentTeam) {
    let result = {
       totalPoints: totalPoints,
       totalPrice: totalPrice,
-      overBudget: totalPrice > global.settings.budgetCap ? true : false
+      overBudget: totalPrice > global.settings.budgetCap ? true : false,
+      prices: prices
    }
 
    return (result);
 }
 
 function registerTeam(currentTeam) {
-   // Check if we're replacing the existing best team, or joining it
-
+   // Check if we're replacing the existing best team…
    if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
       bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
    }
 
+   // … or adding this team to the list because they're tied on score
    if (currentTeam.tallyResults.totalPoints > bestTeam.points) {   // We have a team with a better points total
       bestTeam.points = currentTeam.tallyResults.totalPoints;      // Replace the best points total
       bestTeam.teams = [];                                         // Remove existing best team(s)
@@ -181,6 +185,41 @@ function analyseTeam(currentTeam) {
       // Team drivers are invalid (i.e. not enough of them or contains duplicates)
       stats.counters.invalidTeams++;
    }
+}
+
+function displayStatistics(){
+   console.log(chalk.underline('Statistics:'));
+
+   let statisticsOutput = []; // Initialise output array
+
+   // Add Total Teams
+   statisticsOutput.push({
+      metric: 'Total Teams',
+      value: stats.counters.totalTeams
+   });
+
+   // Add Analysed Teams
+   statisticsOutput.push({
+      metric: 'Analysed Teams',
+      value: stats.counters.analysedTeams
+   });
+
+   // Add Over Budget Teams
+   statisticsOutput.push({
+      metric: 'Over Budget Teams',
+      value: stats.counters.overBudget
+   });
+
+   // Add Invalid Teams
+   statisticsOutput.push({
+      metric: 'Invalid Teams',
+      value: stats.counters.invalidTeams
+   });
+
+   let statisticsColumns = columnify(statisticsOutput);
+
+   console.log(statisticsColumns);
+   console.log(newLine);
 }
 
 function displayBestTeam(){
@@ -265,6 +304,8 @@ function performAnalysis(f1data) {
 
    // Stop the progress spinner
    spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${durationSeconds} seconds`);
+
+   displayStatistics();
 
    displayBestTeam();
 }
