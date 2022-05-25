@@ -29,9 +29,9 @@ const bestTeam = {
 };
 
 /* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
-function round(number, decimalPlaces){ // Rounds a decimal number to a specified precision
+function round(number, decimalPlaces) { // Rounds a decimal number to a specified precision
    const factorOfTen = Math.pow(10, decimalPlaces);
-   return(Math.round(number * factorOfTen) / factorOfTen);
+   return (Math.round(number * factorOfTen) / factorOfTen);
 }
 
 function getConstructors(f1data) { // Extract all Constructors from the raw data
@@ -187,42 +187,37 @@ function analyseTeam(currentTeam) {
    }
 }
 
-function displayStatistics(){
+function displayStatistics() {
    console.log(chalk.underline('Statistics:'));
 
-   let statisticsOutput = []; // Initialise output array
+   let statisticsOutput = [
+      {
+         metric: chalk.grey('Total Teams'),
+         value: stats.counters.totalTeams
+      },
+      {
+         metric: chalk.grey('Analysed Teams'),
+         value: stats.counters.analysedTeams
+      },
+      {
+         metric: chalk.grey('Over Budget Teams'),
+         value: stats.counters.overBudget
+      },
+      {
+         metric: chalk.grey('Invalid Teams'),
+         value: stats.counters.invalidTeams
+      }
+   ];
 
-   // Add Total Teams
-   statisticsOutput.push({
-      metric: 'Total Teams',
-      value: stats.counters.totalTeams
+   let statisticsColumns = columnify(statisticsOutput, {
+      showHeaders: false
    });
-
-   // Add Analysed Teams
-   statisticsOutput.push({
-      metric: 'Analysed Teams',
-      value: stats.counters.analysedTeams
-   });
-
-   // Add Over Budget Teams
-   statisticsOutput.push({
-      metric: 'Over Budget Teams',
-      value: stats.counters.overBudget
-   });
-
-   // Add Invalid Teams
-   statisticsOutput.push({
-      metric: 'Invalid Teams',
-      value: stats.counters.invalidTeams
-   });
-
-   let statisticsColumns = columnify(statisticsOutput);
 
    console.log(statisticsColumns);
    console.log(newLine);
 }
 
-function displayBestTeam(){
+function displayBestTeam() {
    console.log(chalk.underline('Optimal team:'));
    bestTeam.teams.forEach(team => {
       let bestTeamOutput = []; // Initialise output array
