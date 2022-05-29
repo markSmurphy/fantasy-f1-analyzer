@@ -215,7 +215,10 @@ function displayStatistics() {
 }
 
 function displayBestTeam() {
-   console.log(chalk.underline('Optimal team:'));
+   if (bestTeam.teams.length > 1) {
+      console.log(chalk.underline(`Optimal teams (${bestTeam.teams.length}):`));
+   }
+
    bestTeam.teams.forEach(team => {
       let bestTeamOutput = []; // Initialise output array
 
