@@ -270,17 +270,18 @@ function performAnalysis(f1data) {
          // Populate each driver in turn into the first driver slot
          currentTeam.drivers[0] = f1data.drivers[driver1];
 
-         for (let driver2 = 1; driver2 <= 16; driver2++) {
+         for (let driver2 = driver1 + 1; driver2 <= 16; driver2++) {
             currentTeam.drivers[1] = f1data.drivers[driver2];
 
-            for (let driver3 = 2; driver3 <= 17; driver3++) {
+            for (let driver3 = driver2 + 1; driver3 <= 17; driver3++) {
                currentTeam.drivers[2] = f1data.drivers[driver3];
 
-               for (let driver4 = 3; driver4 <= 18; driver4++) {
+               for (let driver4 = driver3 + 1; driver4 <= 18; driver4++) {
                   currentTeam.drivers[3] = f1data.drivers[driver4];
 
-                  for (let driver5 = 4; driver5 <= 19; driver5++) {
+                  for (let driver5 = driver4 + 1; driver5 <= 19; driver5++) {
                      currentTeam.drivers[4] = f1data.drivers[driver5];
+
                      // Add the five indices that generate this team
                      currentTeam.indices = `${driver1} ${driver2} ${driver3} ${driver4} ${driver5}`;
                      analyseTeam(currentTeam);
