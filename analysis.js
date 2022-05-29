@@ -100,23 +100,18 @@ function doesArrayHaveDuplicates(sourceArray) {
 
 function validateDrivers(drivers) {
    // Make sure that `drivers` is an array with five unique members
+   let response = false;
    if (Array.isArray(drivers)) {
       // It is an array ...
       if (drivers.length === 5) {
          // It does have five members
-         if (doesArrayHaveDuplicates(drivers)) {
-            // There are duplicate drivers
-            return (false);
-         } else {
-            // There are *no* duplicates
-            return (true);
+         if (doesArrayHaveDuplicates(drivers) === false) {
+             // There are no duplicate drivers
+             response = true;
          }
-      } else {
-         return (false);
       }
-   } else {
-      return (false);
    }
+   return(response);
 }
 
 function tallyCurrentTeam(currentTeam) {
@@ -185,7 +180,6 @@ function analyseTeam(currentTeam) {
          }
       }
    } else {
-      // Team drivers are invalid (i.e. not enough of them or contains duplicates)
       stats.counters.invalidTeams++;
    }
 }
@@ -284,6 +278,8 @@ function performAnalysis(f1data) {
 
                   for (let driver5 = 4; driver5 <= 19; driver5++) {
                      currentTeam.drivers[4] = f1data.drivers[driver5];
+                     // Add the five indices that generate this team
+                     currentTeam.indices = `${driver1} ${driver2} ${driver3} ${driver4} ${driver5}`;
                      analyseTeam(currentTeam);
                   }
                }
