@@ -36,7 +36,8 @@ console.log(figlet.textSync('Fantasy F1 Analyser', {
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
 let url = `${global.settings.baseUrl}${global.settings.year}/players`
 
-console.log(chalk.grey('Retrieving latest Fantasy F1 data [' + url + '] ...'));
+console.log(chalk.whiteBright('Retrieving latest Fantasy F1 data …'));
+console.log(chalk.grey(url));
 needle(global.settings.httpMethod, url, global.settings.httpOptions)
     .then(function (response) {
         debug('HTTP response %s for [%s] received', response.status, url);
@@ -44,12 +45,10 @@ needle(global.settings.httpMethod, url, global.settings.httpOptions)
     })
     .catch(function (error) {
         console.error('An error occurred while processing Fantasy F1 data');
-        console.error('%s returned: %O', url, error);
+        console.error('%O', error);
     })
 
-
 function processResponse(data) {
-
     let analysis = require('./analysis');
 
     // Get details of constructors and drivers
