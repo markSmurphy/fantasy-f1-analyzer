@@ -50,6 +50,7 @@ needle(global.settings.httpMethod, url, global.settings.httpOptions)
 
 function processResponse(data) {
     let analysis = require('./analysis');
+    let summary = require('./summary');
 
     // Get details of constructors and drivers
     let constructors = analysis.getConstructors(data);
@@ -62,8 +63,8 @@ function processResponse(data) {
     };
 
     // Display summary of current standings
-    let summary = require('./summary');
     summary.displayCurrentStandings(f1dataset);
 
+    // Analyse the latest Fantasy F1 data
     analysis.performAnalysis(f1dataset);
 }

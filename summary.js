@@ -34,17 +34,17 @@ function displayCurrentStandings(f1DataSet) {
 
     // Display summary of current standing
     let columns = columnify(summary, {
+        columnSplitter: ' | ',
         config: {
             constructorPoints: {
-                headingTransform: () => {return('POINTS')},
-                columnSplitter: ' | '
+                headingTransform: () => {return('POINTS')}
             },
             driverPoints: {
                 headingTransform: () => {return('POINTS')}
             }
         }
     });
-    console.log(columns + EOL);
+    console.log(EOL + columns + EOL);
 }
 
 module.exports = { displayCurrentStandings };
