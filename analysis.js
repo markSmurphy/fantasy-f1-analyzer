@@ -106,12 +106,12 @@ function validateDrivers(drivers) {
       if (drivers.length === 5) {
          // It does have five members
          if (doesArrayHaveDuplicates(drivers) === false) {
-             // There are no duplicate drivers
-             response = true;
+            // There are no duplicate drivers
+            response = true;
          }
       }
    }
-   return(response);
+   return (response);
 }
 
 function tallyCurrentTeam(currentTeam) {
