@@ -24,6 +24,7 @@ const columnify = require('columnify');
 
 // Initialise statistics object
 const statistics = require('./statistics');
+const { argv } = require('process');
 const stats = statistics.initialise();
 
 const bestTeam = {
@@ -302,7 +303,9 @@ function performAnalysis(f1data) {
       spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${duration}`);
    }
 
-   displayStatistics();
+   if (argv.verbose) {
+      displayStatistics();
+   }
 
    displayBestTeam();
 }
