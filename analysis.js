@@ -199,7 +199,9 @@ function displayBestTeam() {
          bestTeamOutput.push({ // Add Constructor
             name: formatting.applyTeamColours(driver.display_name, driver.team_abbreviation),
             points: formatting.applyTeamColours(driver.season_score, driver.team_abbreviation),
-            cost: formatting.applyTeamColours(driver.price, driver.team_abbreviation)
+            cost: formatting.applyTeamColours(driver.price, driver.team_abbreviation),
+            qualifyingTop10Streak: formatting.applyTeamColours(driver.streak_events_progress.top_ten_in_a_row_qualifying_progress, driver.team_abbreviation),
+            raceTop10Streak: formatting.applyTeamColours(driver.streak_events_progress.top_ten_in_a_row_race_progress, driver.team_abbreviation)
          });
       });
 
@@ -210,7 +212,19 @@ function displayBestTeam() {
          cost: chalk.bold(team.tallyResults.totalPrice)
       });
 
-      let bestTeamColumns = columnify(bestTeamOutput);
+      let bestTeamColumns = columnify(bestTeamOutput,{
+         columnSplitter: ' | ',
+         config: {
+            qualifyingTop10Streak: {
+                headingTransform: () => {return('QUALIFIED TOP 10 STREAK')},
+                align: 'center'
+            },
+            raceTop10Streak: {
+                headingTransform: () => {return('FINISHED TOP 10 STREAK')},
+                align: 'center'
+            }
+        }
+      });
 
       console.log(bestTeamColumns);
       console.log(newLine);
