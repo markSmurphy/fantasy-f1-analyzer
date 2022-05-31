@@ -7,8 +7,8 @@ const chalk = require('chalk');
 // Import terminal spinner library
 const ora = require('ora');
 
-// Create and start the progress spinner
-const spinnerProgress = ora().start();
+// Create the progress spinner
+const spinnerProgress = ora();
 
 // Formatting of text to F1 constructor team colours
 const formatting = require('./formatting');
@@ -42,7 +42,7 @@ function round(number, decimalPlaces) { // Rounds a decimal number to a specifie
 }
 
 function getConstructors(f1data) { // Extract all Constructors from the raw data
-   debug('getConstructors::Entry');
+   debug('getConstructors()::Entry');
    // Initialise constructors array
    let constructors = [];
 
@@ -53,12 +53,12 @@ function getConstructors(f1data) { // Extract all Constructors from the raw data
          constructors.push(element);
       }
    });
-   debug('getConstructors() found %s constructors', constructors.length);
+   debug(`getConstructors() found ${constructors.length} constructors`);
    return (constructors);
 }
 
 function getDrivers(f1data) { // Extract all Drivers from the raw data
-   debug('getDrivers::Entry');
+   debug('getDrivers()::Entry');
    // Initialise drivers array
    let drivers = [];
 
@@ -69,7 +69,7 @@ function getDrivers(f1data) { // Extract all Drivers from the raw data
          drivers.push(element);
       }
    });
-   debug('getDrivers() found %s drivers', drivers.length);
+   debug(`getDrivers() found ${drivers.length} drivers`);
    return (drivers);
 }
 
@@ -147,7 +147,6 @@ function tallyCurrentTeam(currentTeam, callback) {
 }
 
 function registerTeam(currentTeam) {
-   console.log(`registering team with ${currentTeam.tallyResults.totalPoints} points...`);
    allRegisteredTeams.currentTeams.push(currentTeam); // *** debug
 
    // Check if we're replacing the existing best team …
@@ -232,34 +231,38 @@ function displayBestTeam() {
 }
 
 function performAnalysis(f1data) {
+   debug('performAnalysis()::Entry');
    const startTime = Date.now(); // Record the start time
 
-   // Create a new Current Team object
-   let currentTeam = initCurrentTeamObject();
+   // Start the spinner if we're not showing debug output
+   if (!debug.enabled) {
+      spinnerProgress.start('Initialising ...');
+   }
 
    // Analyse each constructor against all driver lineups
    for (let i = 0; i <= f1data.constructors.length - 1; i++) {
-      currentTeam = initCurrentTeamObject();
 
-      // Populate constructor properties into Current Team
-      currentTeam.constructor = f1data.constructors[i];
-      // Initialise array of team drivers
-      currentTeam.drivers = [];
 
       for (let driver1 = 0; driver1 <= 15; driver1++) {
-         // Populate each driver in turn into the first driver slot
-         currentTeam.drivers[0] = f1data.drivers[driver1]; // Add driver into 1st slot
+         // Iterate through each driver in turn
 
          for (let driver2 = driver1 + 1; driver2 <= 16; driver2++) {
-            currentTeam.drivers[1] = f1data.drivers[driver2]; // Add driver into 2nd slot
 
             for (let driver3 = driver2 + 1; driver3 <= 17; driver3++) {
-               currentTeam.drivers[2] = f1data.drivers[driver3]; // Add driver into 3rd slot
 
                for (let driver4 = driver3 + 1; driver4 <= 18; driver4++) {
-                  currentTeam.drivers[3] = f1data.drivers[driver4]; // Add driver into 4th slot
 
                   for (let driver5 = driver4 + 1; driver5 <= 19; driver5++) {
+                     // Create a new Current Team object
+                     let currentTeam = initCurrentTeamObject();
+
+                     // Populate constructor properties into Current Team
+                     currentTeam.constructor = f1data.constructors[i];
+
+                     currentTeam.drivers[0] = f1data.drivers[driver1]; // Add driver into 1st slot
+                     currentTeam.drivers[1] = f1data.drivers[driver2]; // Add driver into 2nd slot
+                     currentTeam.drivers[2] = f1data.drivers[driver3]; // Add driver into 3rd slot
+                     currentTeam.drivers[3] = f1data.drivers[driver4]; // Add driver into 4th slot
                      currentTeam.drivers[4] = f1data.drivers[driver5]; // Add driver into 5th slot
 
                      /* Analyse the current team */
@@ -270,11 +273,13 @@ function performAnalysis(f1data) {
                      // Increment total count
                      stats.counters.totalTeams++;
 
-                     // Update progress text with current team being analysed
-                     let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
-                     let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
-                     spinnerProgress.text = spinnerText;
-                     spinnerProgress.render();
+                     // Update progress text with current team being analysed if we're not showing debug output
+                     if (!debug.enabled) {
+                        let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
+                        let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                        spinnerProgress.text = spinnerText;
+                        spinnerProgress.render();
+                     }
 
                      // Ensure the team's driver lineup is valid
                      if (validateDrivers(currentTeam.drivers)) {
@@ -291,7 +296,8 @@ function performAnalysis(f1data) {
                               }
                            }
                         });
-                     } else {
+
+                     } else { // The `drivers` array doesn't contain five unique drivers
                         stats.counters.invalidTeams++;
                      }
                   }
@@ -306,7 +312,9 @@ function performAnalysis(f1data) {
    const duration = utils.secondsToHms(durationSeconds);
 
    // Stop the progress spinner
-   spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${duration}`);
+   if (!debug.enabled) {
+      spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${duration}`);
+   }
 
    displayStatistics();
 

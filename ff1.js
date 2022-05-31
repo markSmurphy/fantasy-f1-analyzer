@@ -23,15 +23,14 @@ const needle = require('needle');
 // Initialise configuration and populate the global settings object
 const config = require('./configuration');
 global.settings = config.getSettings();
+debug(`Using settings: ${global.settings}`);
 
 // Write Title to console
 var figlet = require('figlet');
-
 console.log(figlet.textSync('Fantasy F1 Analyser', {
     font: 'Standard',
     horizontalLayout: 'fitted'
 }));
-
 
 // Send HTTP request to 'players' endpoint which has all drivers and constructors
 let url = `${global.settings.baseUrl}${global.settings.year}/players`
@@ -40,15 +39,17 @@ console.log(chalk.whiteBright('Retrieving latest Fantasy F1 data …'));
 console.log(chalk.grey(url));
 needle(global.settings.httpMethod, url, global.settings.httpOptions)
     .then(function (response) {
-        debug('HTTP response %s for [%s] received', response.status, url);
+        debug(`HTTP response ${response.status} for [${url}] received`);
+        debug(response);
         return processResponse(response.body);
     })
     .catch(function (error) {
-        console.error('An error occurred while processing Fantasy F1 data');
-        console.error('%O', error);
+        console.error(`An error occurred while processing Fantasy F1 data: ${error.message}`);
+        console.error(error);
     })
 
 function processResponse(data) {
+    debug('processResponse()::Entry');
     let analysis = require('./analysis');
     let summary = require('./summary');
 

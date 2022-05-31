@@ -16,7 +16,7 @@ https://fantasy-api.formula1.com/f1/2022/circuits
  */
 
 function getSettings() {
-    debug('Entry::getSettings()');
+    debug('getSettings():Entry');
 
     // Get the year, which features in the endpoint's URL path
     let date = new Date().getFullYear();

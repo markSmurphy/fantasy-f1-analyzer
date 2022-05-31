@@ -10,12 +10,12 @@ const columnify = require('columnify');
 // Platform independent end-of-line character
 const EOL = require('os').EOL;
 
-function displayCurrentStandings(f1DataSet) {
-    debug('displayCurrentStandings() :: Entry');
+function displayCurrentStandings(f1dataset) {
+    debug('displayCurrentStandings()::Entry');
 
     // Extract both Drivers & Constructors lists and sort them
-    let drivers = formatting.sortByPoints(f1DataSet.drivers);
-    let constructors = formatting.sortByPoints(f1DataSet.constructors);
+    let drivers = formatting.sortByPoints(f1dataset.drivers);
+    let constructors = formatting.sortByPoints(f1dataset.constructors);
 
     // Initialise the object we're going to store the Summary in
     let summary = [];

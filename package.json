@@ -38,6 +38,7 @@
     "figlet": "^1.5.2",
     "needle": "^3.1.0",
     "ora": "^5.4.1",
+    "supports-color": "^9.2.2",
     "yargs": "^17.4.1"
   },
   "devDependencies": {
