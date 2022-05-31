@@ -14,6 +14,12 @@ if (argv.debug) {
     debug.enable('*');
 }
 
+if (argv.help) {
+    // Show help screen
+    const help = require('./help');
+    help.helpScreen(argv.verbose);
+    process.exit();
+}
 // Initialise console colours
 const chalk = require('chalk');
 
