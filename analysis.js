@@ -145,18 +145,15 @@ function tallyCurrentTeam(currentTeam, callback) {
 function registerTeam(currentTeam) {
    debug('registerTeam():Entry');
 
-   // Check if we're replacing the existing best team …
-   if (currentTeam.tallyResults.totalPoints > bestTeam.points) {   // We have a team with a better points total
+   // Check if we're replacing the existing best team or adding this team to the list because they're tied on points
+   if (currentTeam.tallyResults.totalPoints > bestTeam.points) {          // We have a team with a better points total
       debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${bestTeam.teams.length} which had ${bestTeam.points}`);
-      bestTeam.points = currentTeam.tallyResults.totalPoints;      // Update the best points total
-      bestTeam.teams = [];                                         // Remove existing best team(s)
-      bestTeam.teams.push(currentTeam);                            // Record new best team
-   }
-
-   // … or adding this team to the list because they're tied on score
-   if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
+      bestTeam.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
+      bestTeam.teams = [];                                                // Remove existing best team(s)
+      bestTeam.teams.push(currentTeam);                                   // Record new best team
+   } else if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
       debug(`new team is being added to previous ${bestTeam.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
-      bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
+      bestTeam.teams.push(currentTeam);                                   // Append this team to the `teams` array
    }
 }
 
