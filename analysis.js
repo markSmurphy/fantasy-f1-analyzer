@@ -31,10 +31,6 @@ const bestTeam = {
    teams: []
 };
 
-var allRegisteredTeams = {
-   currentTeams: [],
-   bestTeams: []
-};
 /* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
 function round(number, decimalPlaces) { // Rounds a decimal number to a specified precision
    const factorOfTen = Math.pow(10, decimalPlaces);
@@ -147,42 +143,35 @@ function tallyCurrentTeam(currentTeam, callback) {
 }
 
 function registerTeam(currentTeam) {
-   allRegisteredTeams.currentTeams.push(currentTeam); // *** debug
+   debug('registerTeam():Entry');
 
    // Check if we're replacing the existing best team …
-   if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
-      bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
-   }
-
-   // … or adding this team to the list because they're tied on score
    if (currentTeam.tallyResults.totalPoints > bestTeam.points) {   // We have a team with a better points total
+      debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${bestTeam.teams.length} which had ${bestTeam.points}`);
       bestTeam.points = currentTeam.tallyResults.totalPoints;      // Update the best points total
       bestTeam.teams = [];                                         // Remove existing best team(s)
       bestTeam.teams.push(currentTeam);                            // Record new best team
    }
 
-   allRegisteredTeams.bestTeams.push(bestTeam); // *** debug
+   // … or adding this team to the list because they're tied on score
+   if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
+      debug(`new team is being added to previous ${bestTeam.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
+      bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
+   }
 }
 
 function displayStatistics() {
+   debug('displayStatistics()::Entry');
    console.log(chalk.underline('Statistics:'));
 
    let statisticsOutput = [
-      {
-         metric: chalk.grey('Total Teams'),
-         value: stats.counters.totalTeams
-      },
       {
          metric: chalk.grey('Analysed Teams'),
          value: stats.counters.analysedTeams
       },
       {
-         metric: chalk.grey('Over Budget Teams'),
+         metric: chalk.grey('Teams Over Budget Cap'),
          value: stats.counters.overBudget
-      },
-      {
-         metric: chalk.grey('Invalid Teams'),
-         value: stats.counters.invalidTeams
       }
    ];
 
@@ -196,7 +185,7 @@ function displayStatistics() {
 
 function displayBestTeam() {
    if (bestTeam.teams.length > 1) {
-      console.log(chalk.underline(`Optimal teams (${bestTeam.teams.length}):`));
+      console.log(chalk.whiteBright(`There are ${bestTeam.teams.length} optimal teams:`));
    }
 
    bestTeam.teams.forEach(team => {
@@ -267,8 +256,8 @@ function performAnalysis(f1data) {
 
                      /* Analyse the current team */
 
-                     // ** debug ** Add the five indices that generate this team
-                     currentTeam.indices = `${driver1} ${driver2} ${driver3} ${driver4} ${driver5}`;
+                     // Add the five indices that generate this team
+                     //currentTeam.indices = `${driver1} ${driver2} ${driver3} ${driver4} ${driver5}`;
 
                      // Increment total count
                      stats.counters.totalTeams++;
@@ -319,11 +308,6 @@ function performAnalysis(f1data) {
    displayStatistics();
 
    displayBestTeam();
-
-   // ** debug
-   const fs = require('fs');
-   console.log('writing ./debug/debug.json')
-   fs.writeFileSync('./debug/debug.json', JSON.stringify(allRegisteredTeams, null, 2), 'utf-8');
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };
