@@ -31,6 +31,10 @@ const bestTeam = {
    teams: []
 };
 
+var allRegisteredTeams = {
+   currentTeams: [],
+   bestTeams: []
+};
 /* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
 function round(number, decimalPlaces) { // Rounds a decimal number to a specified precision
    const factorOfTen = Math.pow(10, decimalPlaces);
@@ -111,10 +115,11 @@ function validateDrivers(drivers) {
          }
       }
    }
+   // Return response
    return (response);
 }
 
-function tallyCurrentTeam(currentTeam) {
+function tallyCurrentTeam(currentTeam, callback) {
    let prices = [];
    // Add up total points and total price
    let totalPoints = currentTeam.constructor.season_score;
@@ -122,66 +127,42 @@ function tallyCurrentTeam(currentTeam) {
    prices.push(currentTeam.constructor.price);
 
    currentTeam.drivers.forEach(driver => {
-      totalPoints += driver.season_score;
-      totalPrice += driver.price;
+      totalPoints = totalPoints + driver.season_score;
+      totalPrice = totalPrice + driver.price;
       prices.push(driver.price);
    })
 
    // Round the total price to one decimal place
-   totalPrice = round(totalPrice, 1);
+   let totalPriceRounded = round(totalPrice, 1);
 
    let result = {
       totalPoints: totalPoints,
-      totalPrice: totalPrice,
+      totalPrice: totalPriceRounded,
+      totalPriceUnrounded: totalPrice,
       overBudget: totalPrice > global.settings.budgetCap ? true : false,
       prices: prices
    }
 
-   return (result);
+   callback(result);
 }
 
 function registerTeam(currentTeam) {
-   // Check if we're replacing the existing best team…
+   console.log(`registering team with ${currentTeam.tallyResults.totalPoints} points...`);
+   allRegisteredTeams.currentTeams.push(currentTeam); // *** debug
+
+   // Check if we're replacing the existing best team …
    if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
       bestTeam.teams.push(currentTeam);                            // Append this team to the `teams` array
    }
 
    // … or adding this team to the list because they're tied on score
    if (currentTeam.tallyResults.totalPoints > bestTeam.points) {   // We have a team with a better points total
-      bestTeam.points = currentTeam.tallyResults.totalPoints;      // Replace the best points total
+      bestTeam.points = currentTeam.tallyResults.totalPoints;      // Update the best points total
       bestTeam.teams = [];                                         // Remove existing best team(s)
       bestTeam.teams.push(currentTeam);                            // Record new best team
    }
-}
 
-function analyseTeam(currentTeam) {
-   // Increment total count
-   stats.counters.totalTeams++;
-
-   // Update progress text with current team being analysed
-   let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
-   let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
-   spinnerProgress.text = spinnerText;
-   spinnerProgress.render();
-
-   // Ensure the team's driver lineup is valid
-   if (validateDrivers(currentTeam.drivers)) {
-      stats.counters.analysedTeams++;
-      let tallyResults = tallyCurrentTeam(currentTeam);
-
-      if (tallyResults.overBudget) { // Check if the team was over budget
-         stats.counters.overBudget++;
-      } else {
-         // Team is within budget
-         if (tallyResults.totalPoints >= bestTeam.points) {
-            // We've got a contender for best team. Append the results and process its potential
-            currentTeam.tallyResults = tallyResults;
-            registerTeam(currentTeam);
-         }
-      }
-   } else {
-      stats.counters.invalidTeams++;
-   }
+   allRegisteredTeams.bestTeams.push(bestTeam); // *** debug
 }
 
 function displayStatistics() {
@@ -257,40 +238,68 @@ function performAnalysis(f1data) {
    let currentTeam = initCurrentTeamObject();
 
    // Analyse each constructor against all driver lineups
-   f1data.constructors.forEach(constructor => {
-
+   for (let i = 0; i <= f1data.constructors.length - 1; i++) {
       currentTeam = initCurrentTeamObject();
 
       // Populate constructor properties into Current Team
-      currentTeam.constructor = constructor;
+      currentTeam.constructor = f1data.constructors[i];
       // Initialise array of team drivers
       currentTeam.drivers = [];
 
       for (let driver1 = 0; driver1 <= 15; driver1++) {
          // Populate each driver in turn into the first driver slot
-         currentTeam.drivers[0] = f1data.drivers[driver1];
+         currentTeam.drivers[0] = f1data.drivers[driver1]; // Add driver into 1st slot
 
          for (let driver2 = driver1 + 1; driver2 <= 16; driver2++) {
-            currentTeam.drivers[1] = f1data.drivers[driver2];
+            currentTeam.drivers[1] = f1data.drivers[driver2]; // Add driver into 2nd slot
 
             for (let driver3 = driver2 + 1; driver3 <= 17; driver3++) {
-               currentTeam.drivers[2] = f1data.drivers[driver3];
+               currentTeam.drivers[2] = f1data.drivers[driver3]; // Add driver into 3rd slot
 
                for (let driver4 = driver3 + 1; driver4 <= 18; driver4++) {
-                  currentTeam.drivers[3] = f1data.drivers[driver4];
+                  currentTeam.drivers[3] = f1data.drivers[driver4]; // Add driver into 4th slot
 
                   for (let driver5 = driver4 + 1; driver5 <= 19; driver5++) {
-                     currentTeam.drivers[4] = f1data.drivers[driver5];
+                     currentTeam.drivers[4] = f1data.drivers[driver5]; // Add driver into 5th slot
 
-                     // Add the five indices that generate this team
+                     /* Analyse the current team */
+
+                     // ** debug ** Add the five indices that generate this team
                      currentTeam.indices = `${driver1} ${driver2} ${driver3} ${driver4} ${driver5}`;
-                     analyseTeam(currentTeam);
+
+                     // Increment total count
+                     stats.counters.totalTeams++;
+
+                     // Update progress text with current team being analysed
+                     let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
+                     let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                     spinnerProgress.text = spinnerText;
+                     spinnerProgress.render();
+
+                     // Ensure the team's driver lineup is valid
+                     if (validateDrivers(currentTeam.drivers)) {
+                        stats.counters.analysedTeams++;
+                        tallyCurrentTeam(currentTeam, (tallyResults) => {
+                           if (tallyResults.overBudget) { // Check if the team was over budget
+                              stats.counters.overBudget++;
+                           } else {
+                              // Team is within budget
+                              if (tallyResults.totalPoints >= bestTeam.points) {
+                                 // We've got a contender for best team. Append the results and process its potential
+                                 currentTeam.tallyResults = tallyResults;
+                                 registerTeam(currentTeam);
+                              }
+                           }
+                        });
+                     } else {
+                        stats.counters.invalidTeams++;
+                     }
                   }
                }
             }
          }
       }
-   });
+   }
 
    const endTime = Date.now(); // Record the end time
    const durationSeconds = Math.ceil((endTime - startTime) / 1000); // Obtain the duration in seconds
@@ -302,6 +311,11 @@ function performAnalysis(f1data) {
    displayStatistics();
 
    displayBestTeam();
+
+   // ** debug
+   const fs = require('fs');
+   console.log('writing ./debug/debug.json')
+   fs.writeFileSync('./debug/debug.json', JSON.stringify(allRegisteredTeams, null, 2), 'utf-8');
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };
