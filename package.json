@@ -23,7 +23,11 @@
     "F1",
     "Analyzer",
     "Analyser",
-    "Formula 1"
+    "Formula 1",
+    "Driver",
+    "Constructor",
+    "Team",
+    "FF1"
   ],
   "author": "Mark Murphy",
   "license": "MIT",
