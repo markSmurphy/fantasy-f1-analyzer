@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://MarkSMurphy@bitbucket.org/MarkSMurphy/fantasy-f1-analyzer.git"
+    "url": "git+https://github.com/markSmurphy/fantasy-f1-analyzer.git"
   },
   "keywords": [
     "Fantasy",
@@ -28,9 +28,9 @@
   "author": "Mark Murphy",
   "license": "MIT",
   "bugs": {
-    "url": "https://bitbucket.org/MarkSMurphy/fantasy-f1-analyzer/issues"
+    "url": "https://github.com/markSmurphy/fantasy-f1-analyzer/issues"
   },
-  "homepage": "https://bitbucket.org/MarkSMurphy/fantasy-f1-analyzer#readme",
+  "homepage": "https://github.com/markSmurphy/fantasy-f1-analyzer#readme",
   "dependencies": {
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
