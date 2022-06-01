@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/npm/v/fantasy-f1-analyzer?style=plastic)
 ![node-current](https://img.shields.io/node/v/fantasy-f1-analyzer?style=plastic)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/99616f4abbc54e6fb78e888471814080)](https://www.codacy.com/gh/markSmurphy/fantasy-f1-analyzer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=markSmurphy/fantasy-f1-analyzer&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e77d8079c8424bb6abcc0ef1309a8a5c)](https://www.codacy.com/gh/markSmurphy/fantasy-f1-analyzer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=markSmurphy/fantasy-f1-analyzer&amp;utm_campaign=Badge_Grade)
 ![GitHub issues](https://img.shields.io/github/issues/markSmurphy/fantasy-f1-analyzer?style=plastic)
 [![Known Vulnerabilities](https://snyk.io/test/github/markSmurphy/fantasy-f1-analyzer/badge.svg?targetFile=package.json)](https://snyk.io/test/github/markSmurphy/fantasy-f1-analyzer?targetFile=package.json)
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/fantasy-f1-analyzer?style=plastic)
