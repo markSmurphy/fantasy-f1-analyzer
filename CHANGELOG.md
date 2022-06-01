@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.0.0] - dd<sup>th</sup> *MMM* 2020
+## [v1.0.0] - 1<sup>st</sup> June 2022
 
 Initial release.
 
