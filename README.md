@@ -51,7 +51,7 @@ ff1
 
 There are a few command line options you can use:
 
-### --verbose
+### Verbose
 
 `--verbose`
 
@@ -65,7 +65,7 @@ e.g.
 ff1 --verbose
 ```
 
-### --debug
+### Debug
 
 `--debug`
 
@@ -79,19 +79,19 @@ e.g.
 ff1 --debug
 ```
 
-### --no-color
+### No-color
 
 `--no-color`
 
 Switches off colour output.
 
-### --version
+### Version
 
 `--version`
 
 Displays the version number.
 
-### --help
+### Help
 
 `--help`
 
