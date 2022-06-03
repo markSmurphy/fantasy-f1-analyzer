@@ -1,6 +1,6 @@
 {
   "name": "fantasy-f1-analyzer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A command line utility which retrieves the latest Fantasy F1 results and analyses all possible constructor and driver combinations and suggests an optimum Fantasy F1 Team.",
   "main": "ff1.js",
   "scripts": {

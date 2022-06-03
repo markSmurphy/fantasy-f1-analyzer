@@ -5,10 +5,10 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e77d8079c8424bb6abcc0ef1309a8a5c)](https://www.codacy.com/gh/markSmurphy/fantasy-f1-analyzer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=markSmurphy/fantasy-f1-analyzer&amp;utm_campaign=Badge_Grade)
 ![GitHub issues](https://img.shields.io/github/issues/markSmurphy/fantasy-f1-analyzer?style=plastic)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/markSmurphy/fantasy-f1-analyzer?style=plastic)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/Downloads%20Total?style=plastic)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/fantasy-f1-analyzer?style=plastic)
 ![NPM Downloads Total](https://img.shields.io/npm/dt/fantasy-f1-analyzer?style=plastic)
 ![NPM Downloads/Month](https://img.shields.io/npm/dm/fantasy-f1-analyzer?style=plastic)
-![Last Commit](https://badgen.net/github/last-commit/markSmurphy/fantasy-f1-analyzer)
+![Last Commit](https://badgen.net/github/last-commit/markSmurphy/fantasy-f1-analyzer/main)
 ![Licence](https://img.shields.io/npm/l/fantasy-f1-analyzer?style=plastic)
 
 A command line utility which retrieves the latest Fantasy F1 results and analyses all possible constructor and driver combinations and suggests an optimum Fantasy F1 Team.
