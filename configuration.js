@@ -27,7 +27,8 @@ function getSettings() {
         budgetCap: 100,
         verbose: false,
         httpMethod: 'GET',
-        httpOptions: {}
+        httpOptions: {},
+        progressUpdateInterval: 1
     };
 
     try {

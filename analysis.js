@@ -212,18 +212,18 @@ function displayBestTeam() {
          cost: chalk.bold(team.tallyResults.totalPrice)
       });
 
-      let bestTeamColumns = columnify(bestTeamOutput,{
+      let bestTeamColumns = columnify(bestTeamOutput, {
          columnSplitter: ' | ',
          config: {
             qualifyingTop10Streak: {
-                headingTransform: () => {return('QUALIFIED TOP 10 STREAK')},
-                align: 'center'
+               headingTransform: () => { return ('QUALIFIED TOP 10 STREAK') },
+               align: 'center'
             },
             raceTop10Streak: {
-                headingTransform: () => {return('FINISHED TOP 10 STREAK')},
-                align: 'center'
+               headingTransform: () => { return ('FINISHED TOP 10 STREAK') },
+               align: 'center'
             }
-        }
+         }
       });
 
       console.log(bestTeamColumns);
@@ -276,10 +276,15 @@ function performAnalysis(f1data) {
 
                      // Update progress text with current team being analysed if we're not showing debug output
                      if (!debug.enabled) {
+                        // Get the current team's constructor in its team colour
                         let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
-                        let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
-                        spinnerProgress.text = spinnerText;
-                        spinnerProgress.render();
+
+                        if (stats.counters.totalTeams % global.settings.progressUpdateInterval === 0) { // Only update screen spinner every nth team analysed
+                           // Update the spinner progress text
+                           let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                           spinnerProgress.text = spinnerText;
+                           spinnerProgress.render();
+                        }
                      }
 
                      // Ensure the team's driver lineup is valid
