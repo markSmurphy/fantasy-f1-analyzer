@@ -3,7 +3,8 @@
 ## v1.1.0 - 4<sup>th</sup> June 2022
 
 * Improved Fantasy F1 API error handling
-* Added support for option `--year`
+* Added the argument `--year` to override the default season
+* Added the argument `--budget` to override the default budget cap
 
 ---
 

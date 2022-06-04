@@ -55,9 +55,17 @@ There are a few command line options you can use:
 
 `--year <nnnn>`
 
-Specifies the season's year.
+Specifies the season's year in case there's a need to override the default.
 
 Default: The current date's four digit year (e.g. `2022`).
+
+### budget
+
+`--budget <nnn>`
+
+Specifies the budget cap in case there's a need to override the default.
+
+Default: `100`.
 
 ### Verbose
 

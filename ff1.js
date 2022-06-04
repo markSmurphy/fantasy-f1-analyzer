@@ -49,13 +49,13 @@ needle(global.settings.httpMethod, url, global.settings.httpOptions)
         debug(response);
         if (response.statusCode != 200) {
             console.error(`${chalk.redBright(response.statusCode)} - ${chalk.redBright(response.statusMessage)}`);
-            if(Object.prototype.hasOwnProperty.call(response.body, 'errors')){
+            if (Object.prototype.hasOwnProperty.call(response.body, 'errors')) {
                 console.error('The Fantasy F1 API returned an error: %O', response.body.errors);
             }
             // Exit as we didn't receive a good response from the API
             process.exit();
 
-        }else {
+        } else {
             return processResponse(response.body);
         }
     })

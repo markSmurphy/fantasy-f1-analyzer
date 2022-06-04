@@ -34,14 +34,25 @@ function getSettings() {
         // Check command line parameters for overrides...
         debug('Looking for overrides to default settings');
 
-        // Override the year (season)
+        // Check for --year to override default season
         if (argv.year) {
             // Validate that an integer was specified
             if (Number.isInteger(argv.year)) {
                 settings.year = argv.year;
                 debug('Year set to %s', settings.year);
             } else {
-                console.log(chalk.blue('Ignoring "--year %s" because the year must be an integer. Using the default "%s" instead'), argv.year, settings.iterations);
+                console.log(chalk.blue('Ignoring "--year %s" because the year must be an integer. Using the default "%s" instead'), argv.year, settings.year);
+            }
+        }
+
+        // Check for --budget to override default budget cap
+        if (argv.budget) {
+            // Validate that an integer was specified
+            if (Number.isInteger(argv.budget)) {
+                settings.budgetCap = argv.budget;
+                debug('Budget cap set to %s', settings.budgetCap);
+            } else {
+                console.log(chalk.blue('Ignoring "--budget %s" because the budget cap must be an integer. Using the default "%s" instead'), argv.budget, settings.budgetCap);
             }
         }
 

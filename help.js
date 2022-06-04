@@ -28,7 +28,8 @@ module.exports = {
         console.log('   ' + 'node ff1.js [options]');
         console.log(endOfLine);
         console.log(chalk.grey('OPTIONS:'));
-        console.log('   ' + '--year <nnnn>                 ' + chalk.grey('Specifies the season\'s year. Default:', date.toString()));
+        console.log('   ' + '--year <nnnn>                 ' + chalk.grey('Override the default season. Default:', date.toString()));
+        console.log('   ' + '--budget <nnn>                ' + chalk.grey('Override the default budget cap. Default: 100'));
         console.log('   ' + '--verbose                     ' + chalk.grey('Enables verbose output.'));
         console.log('   ' + '--debug                       ' + chalk.grey('Enables debugging output.'));
         console.log('   ' + '--no-color                    ' + chalk.grey('Switches off colour output.'));
