@@ -279,7 +279,7 @@ function performAnalysis(f1data) {
                         // Get the current team's constructor in its team colour
                         let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
 
-                        if (stats.counters.totalTeams % global.settings.progressUpdateInterval === 0) { // Only update screen spinner every nth team analysed
+                        if (stats.counters.totalTeams % global.settings.progressInterval === 0) { // Only update screen spinner every nth team analysed
                            // Update the spinner progress text
                            let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
                            spinnerProgress.text = spinnerText;
