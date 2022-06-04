@@ -30,7 +30,7 @@ module.exports = {
         console.log(chalk.grey('OPTIONS:'));
         console.log('   ' + '--year <nnnn>                 ' + chalk.grey('Override the default season. Default:', date.toString()));
         console.log('   ' + '--budget <nnn>                ' + chalk.grey('Override the default budget cap. Default: 100'));
-        console.log('   ' + '--progressinterval <nn>       ' + chalk.grey('Update analysis progress every nth team. Default: 1'));
+        console.log('   ' + '--progressinterval <n>        ' + chalk.grey('Update analysis progress every nth team. Default: 5'));
         console.log('   ' + '--verbose                     ' + chalk.grey('Enables verbose output.'));
         console.log('   ' + '--debug                       ' + chalk.grey('Enables debugging output.'));
         console.log('   ' + '--no-color                    ' + chalk.grey('Switches off colour output.'));

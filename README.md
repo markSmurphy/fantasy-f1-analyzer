@@ -69,11 +69,11 @@ Default: `100`.
 
 ### progress interval
 
-`--progressinterval <nn>`
+`--progressinterval <n>`
 
-Update the analysis progress spinner every *n*th team that's analysed. The higher the number, the less frequently the screen is updated and the faster the analysis completes.
+Update the analysis progress spinner every *n*th team that's analysed. The higher the number `n`, the less frequently the screen is updated and the faster the analysis completes.
 
-Default: `1` (updates progress spinner for each team that's analysed).
+Default: `5` (updates progress spinner for each team that's analysed).
 
 ### Verbose
 

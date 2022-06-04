@@ -6,6 +6,7 @@
 * Added the argument `--year` to override the default season.
 * Added the argument `--budget` to override the default budget cap.
 * Added the argument `--progressinterval` to change how frequently the screen progress spinner is updated.
+* Changed the `progressinterval` to `5` so that the running time is reduced by default.
 * Renamed the `Streak` output column headings for greater clarity.
 
 ---

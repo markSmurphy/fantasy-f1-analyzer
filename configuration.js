@@ -28,7 +28,7 @@ function getSettings() {
         verbose: false,
         httpMethod: 'GET',
         httpOptions: {},
-        progressInterval: 1
+        progressInterval: 5
     };
 
     try {
