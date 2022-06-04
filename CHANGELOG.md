@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.0 - 5<sup>th</sup> June 2022
+
+* Added the common points tally when there's two or more optimal teams.
+
+![common point tally](./images/commonPointsTally.png)
+
+* Updated screenshots to reflect latest output.
+
+---
+
 ## v1.1.0 - 4<sup>th</sup> June 2022
 
 * Improved Fantasy F1 API error handling.
