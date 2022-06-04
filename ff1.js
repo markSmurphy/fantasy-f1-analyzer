@@ -42,12 +42,22 @@ console.log(figlet.textSync('Fantasy F1 Analyser', {
 let url = `${global.settings.baseUrl}${global.settings.year}/players`
 
 console.log(chalk.whiteBright('Retrieving latest Fantasy F1 data …'));
-console.log(chalk.grey(url));
+console.log(chalk.blueBright(url));
 needle(global.settings.httpMethod, url, global.settings.httpOptions)
     .then(function (response) {
-        debug(`HTTP response ${response.status} for [${url}] received`);
+        debug(`HTTP response ${response.statusCode} for [${url}] received`);
         debug(response);
-        return processResponse(response.body);
+        if (response.statusCode != 200) {
+            console.error(`${chalk.redBright(response.statusCode)} - ${chalk.redBright(response.statusMessage)}`);
+            if(Object.prototype.hasOwnProperty.call(response.body, 'errors')){
+                console.error('The Fantasy F1 API returned an error: %O', response.body.errors);
+            }
+            // Exit as we didn't receive a good response from the API
+            process.exit();
+
+        }else {
+            return processResponse(response.body);
+        }
     })
     .catch(function (error) {
         console.error(`An error occurred while processing Fantasy F1 data: ${error.message}`);

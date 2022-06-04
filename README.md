@@ -51,6 +51,14 @@ ff1
 
 There are a few command line options you can use:
 
+### year
+
+`--year <nnnn>`
+
+Specifies the season's year.
+
+Default: The current date's four digit year (e.g. `2022`).
+
 ### Verbose
 
 `--verbose`

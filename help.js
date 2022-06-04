@@ -5,10 +5,13 @@ module.exports = {
     helpScreen: function (verbose) {
         // Platform independent end-of-line character
         const endOfLine = require('os').EOL;
-        // console colours
+        // Console colours
         const chalk = require('chalk');
-        // parse package.json for the version number
+        // Parse package.json for the version number
         const npmPackage = require('./package.json');
+
+        // Get date object to display default --year value
+        let date = new Date().getFullYear();
 
         // Display help screen
         console.log(chalk.blueBright(npmPackage.name));
@@ -25,11 +28,12 @@ module.exports = {
         console.log('   ' + 'node ff1.js [options]');
         console.log(endOfLine);
         console.log(chalk.grey('OPTIONS:'));
-        console.log('   ' + '--verbose                     ' + chalk.grey('Enables verbose output'));
-        console.log('   ' + '--debug                       ' + chalk.grey('Enables debugging output'));
-        console.log('   ' + '--no-color                    ' + chalk.grey('Switches off colour output'));
-        console.log('   ' + '--version                     ' + chalk.grey('Display version number'));
-        console.log('   ' + '--help                        ' + chalk.grey('Display this help'));
+        console.log('   ' + '--year <nnnn>                 ' + chalk.grey('Specifies the season\'s year. Default:', date.toString()));
+        console.log('   ' + '--verbose                     ' + chalk.grey('Enables verbose output.'));
+        console.log('   ' + '--debug                       ' + chalk.grey('Enables debugging output.'));
+        console.log('   ' + '--no-color                    ' + chalk.grey('Switches off colour output.'));
+        console.log('   ' + '--version                     ' + chalk.grey('Display version number.'));
+        console.log('   ' + '--help                        ' + chalk.grey('Display help screen.'));
         console.log(endOfLine);
         // Display more information if `verbose` is enabled
         if (verbose) {
