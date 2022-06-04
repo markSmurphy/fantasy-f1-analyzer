@@ -216,11 +216,11 @@ function displayBestTeam() {
          columnSplitter: ' | ',
          config: {
             qualifyingTop10Streak: {
-               headingTransform: () => { return ('QUALIFIED TOP 10 STREAK') },
+               headingTransform: () => { return ('QUALIFIED TOP 10 (STREAK)') },
                align: 'center'
             },
             raceTop10Streak: {
-               headingTransform: () => { return ('FINISHED TOP 10 STREAK') },
+               headingTransform: () => { return ('FINISHED TOP 10 (STREAK)') },
                align: 'center'
             }
          }
