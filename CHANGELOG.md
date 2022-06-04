@@ -5,6 +5,7 @@
 * Improved Fantasy F1 API error handling
 * Added the argument `--year` to override the default season
 * Added the argument `--budget` to override the default budget cap
+* Added the argument `--progressinterval` to change how frequently the screen progress spinner is updated
 
 ---
 

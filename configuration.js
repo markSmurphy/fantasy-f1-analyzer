@@ -57,6 +57,17 @@ function getSettings() {
             }
         }
 
+        // Check for --progressinterval to override default progress update interval
+        if (argv.progressinterval) {
+            // Validate that an integer was specified
+            if (Number.isInteger(argv.progressinterval)) {
+                settings.progressInterval = argv.progressinterval;
+                debug('Progress Update Interval set to %s', settings.progressinterval);
+            } else {
+                console.log(chalk.blue('Ignoring "--progressinterval %s" because it must be an integer. Using the default "%s" instead'), argv.progressinterval, settings.progressInterval);
+            }
+        }
+
         // Check for '--verbose' argument
         if (argv.verbose) {
             settings.verbose = true;

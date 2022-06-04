@@ -44,7 +44,7 @@ npm install -g fantasy-f1-analyzer
 Start an analysis via the command:
 
 ```shell
-ff1
+ff1 [options]
 ```
 
 ## Options
@@ -67,6 +67,14 @@ Specifies the budget cap in case there's a need to override the default.
 
 Default: `100`.
 
+### progress interval
+
+`--progressinterval <nn>`
+
+Update the analysis progress spinner every *n*th team that's analysed. The higher the number, the less frequently the screen is updated and the faster the analysis completes.
+
+Default: `1` (updates progress spinner for each team that's analysed).
+
 ### Verbose
 
 `--verbose`
@@ -75,12 +83,6 @@ Enables verbose output.
 
 Default: `false`
 
-e.g.
-
-```shell
-ff1 --verbose
-```
-
 ### Debug
 
 `--debug`
@@ -88,12 +90,6 @@ ff1 --verbose
 Enables debugging output.
 
 Default: `false`
-
-e.g.
-
-```shell
-ff1 --debug
-```
 
 ### No-color
 
