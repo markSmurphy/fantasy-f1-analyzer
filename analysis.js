@@ -182,6 +182,7 @@ function displayStatistics() {
 }
 
 function displayBestTeam() {
+   console.log(newLine); // Separation from previous output
    if (bestTeam.teams.length > 1) {
       console.log(chalk.whiteBright(`There are ${bestTeam.teams.length} optimal teams with ${bestTeam.points} points:`));
    }
