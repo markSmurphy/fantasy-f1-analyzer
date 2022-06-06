@@ -124,8 +124,8 @@ function tallyCurrentTeam(currentTeam, callback) {
    prices.push(currentTeam.constructor.price);
 
    currentTeam.drivers.forEach(driver => {
-      totalPoints = totalPoints + driver.season_score;
-      totalPrice = totalPrice + driver.price;
+      totalPoints += driver.season_score;
+      totalPrice += driver.price;
       prices.push(driver.price);
    })
 
