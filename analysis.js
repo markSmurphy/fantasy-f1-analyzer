@@ -275,7 +275,7 @@ function performAnalysis(f1data) {
                      // Increment total count
                      stats.counters.totalTeams++;
 
-                     // Update progress text with current team being analysed if we're not showing debug output
+                     // Update progress spinner text if we're *not* showing debug output (because the output gets far too verbose)
                      if (!debug.enabled) {
                         // Get the current team's constructor in its team colour
                         let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
@@ -283,6 +283,7 @@ function performAnalysis(f1data) {
                         if (stats.counters.totalTeams % global.settings.progressInterval === 0) { // Only update screen spinner every nth team analysed
                            // Update the spinner progress text
                            let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                           spinnerText += ` [${stats.counters.totalTeams} teams]`; // Append the total number of teams analysed thus far
                            spinnerProgress.text = spinnerText;
                            spinnerProgress.render();
                         }
