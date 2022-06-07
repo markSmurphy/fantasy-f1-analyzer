@@ -6,6 +6,8 @@
 * Fixed an issue where `--verbose` didn't display the analysis statistics.
 * Added the argument `--worst` to display the team with the worst points tally instead.
 
+![worst team output](./images/worstTeamOutput.png)
+
 ---
 
 ## v1.2.0 - 5<sup>th</sup> June 2022

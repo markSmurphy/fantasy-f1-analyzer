@@ -53,8 +53,10 @@ There are a few command line options you can use:
 
 ### worst
 
-`--worst` or `--worstteam` displays the Fantasy F1 team with the worst points tally, instead of displaying the best.
+`--worst` displays the Fantasy F1 team with the worst points tally, instead of displaying the best.
 This might be more interesting than actually useful.
+
+![worst team output](./images/worstTeamOutput.png)
 
 ### year
 
