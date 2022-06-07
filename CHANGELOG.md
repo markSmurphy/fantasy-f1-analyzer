@@ -1,4 +1,4 @@
-# Changelog
+# Change Log
 
 ## v1.3.0 - TBC
 
