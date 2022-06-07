@@ -27,9 +27,16 @@ const statistics = require('./statistics');
 const { argv } = require('process');
 const stats = statistics.initialise();
 
-const bestTeam = {
-   points: 0,
-   teams: []
+const savedTeams = {
+   best: {
+      points: 0,
+      teams: []
+   },
+   worst: {
+      points: 0,
+      teams: []
+   }
+
 };
 
 /* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
@@ -147,14 +154,14 @@ function registerTeam(currentTeam) {
    debug('registerTeam():Entry');
 
    // Check if we're replacing the existing best team or adding this team to the list because they're tied on points
-   if (currentTeam.tallyResults.totalPoints > bestTeam.points) {          // We have a team with a better points total
-      debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${bestTeam.teams.length} which had ${bestTeam.points}`);
-      bestTeam.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
-      bestTeam.teams = [];                                                // Remove existing best team(s)
-      bestTeam.teams.push(currentTeam);                                   // Record new best team
-   } else if (currentTeam.tallyResults.totalPoints === bestTeam.points) { // We have a team with an equal points total
-      debug(`new team is being added to previous ${bestTeam.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
-      bestTeam.teams.push(currentTeam);                                   // Append this team to the `teams` array
+   if (currentTeam.tallyResults.totalPoints > savedTeams.best.points) {          // We have a team with a better points total
+      debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${savedTeams.best.teams.length} which had ${savedTeams.best.points}`);
+      savedTeams.best.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
+      savedTeams.best.teams = [];                                                // Remove existing best team(s)
+      savedTeams.best.teams.push(currentTeam);                                   // Record new best team
+   } else if (currentTeam.tallyResults.totalPoints === savedTeams.best.points) { // We have a team with an equal points total
+      debug(`new team is being added to previous ${savedTeams.best.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
+      savedTeams.best.teams.push(currentTeam);                                   // Append this team to the `teams` array
    }
 }
 
@@ -183,11 +190,11 @@ function displayStatistics() {
 
 function displayBestTeam() {
    console.log(newLine); // Separation from previous output
-   if (bestTeam.teams.length > 1) {
-      console.log(chalk.whiteBright(`There are ${bestTeam.teams.length} optimal teams with ${bestTeam.points} points:`));
+   if (savedTeams.best.teams.length > 1) {
+      console.log(chalk.whiteBright(`There are ${savedTeams.best.teams.length} optimal teams with ${savedTeams.best.points} points:`));
    }
 
-   bestTeam.teams.forEach(team => {
+   savedTeams.best.teams.forEach(team => {
       let bestTeamOutput = []; // Initialise output array
 
       bestTeamOutput.push({ // Add Constructor
@@ -243,7 +250,6 @@ function performAnalysis(f1data) {
 
    // Analyse each constructor against all driver lineups
    for (let i = 0; i <= f1data.constructors.length - 1; i++) {
-
 
       for (let driver1 = 0; driver1 <= 15; driver1++) {
          // Iterate through each driver in turn
@@ -310,7 +316,7 @@ function performAnalysis(f1data) {
                               stats.counters.overBudget++;
                            } else {
                               // Team is within budget
-                              if (tallyResults.totalPoints >= bestTeam.points) {
+                              if (tallyResults.totalPoints >= savedTeams.best.points) {
                                  // We've got a contender for best team. Append the results and process its potential
                                  currentTeam.tallyResults = tallyResults;
                                  registerTeam(currentTeam);
