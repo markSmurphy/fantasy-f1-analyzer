@@ -386,11 +386,11 @@ function performAnalysis(f1data) {
    } else { // We're reporting on the worst team(s) found
       if (savedTeams.worst.teams.length === 1) {
 
-         console.log(chalk.whiteBright(`There is one worst team with ${savedTeams.worst.points} points (${savedTeams.best.points - savedTeams.worst.points} behind the best):`));
+         console.log(chalk.whiteBright(`There is one team with the worst points tally of ${savedTeams.worst.points} (${savedTeams.best.points - savedTeams.worst.points} behind the best):`));
 
       } else {
 
-         console.log(chalk.whiteBright(`There are ${savedTeams.worst.teams.length} optimal teams with ${savedTeams.worst.points} points:`));
+         console.log(chalk.whiteBright(`There are ${savedTeams.worst.teams.length} teams sharing the worst points tally of ${savedTeams.worst.points} (${savedTeams.best.points - savedTeams.worst.points} behind the best):`));
       }
       displaySavedTeam(savedTeams.worst);
 
