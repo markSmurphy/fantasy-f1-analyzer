@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.0 - TBC
+
+* Added the number of teams analysed so far to the progress spinner.
+
+---
+
 ## v1.2.0 - 5<sup>th</sup> June 2022
 
 * Added the common points tally when there's two or more optimal teams.
