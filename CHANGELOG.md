@@ -2,7 +2,7 @@
 
 ## v1.3.0 - TBC
 
-* Added the number of teams analysed so far to the progress spinner.
+* Added a right-align count of the number of teams analysed so far to the progress spinner text.
 
 ---
 

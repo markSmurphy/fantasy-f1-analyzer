@@ -28,7 +28,8 @@ function getSettings() {
         verbose: false,
         httpMethod: 'GET',
         httpOptions: {},
-        progressInterval: 5
+        progressInterval: 5,
+        paddingChar: ' '
     };
 
     try {

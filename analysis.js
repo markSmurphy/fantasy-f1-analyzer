@@ -276,15 +276,28 @@ function performAnalysis(f1data) {
                      stats.counters.totalTeams++;
 
                      // Update progress spinner text if we're *not* showing debug output (because the output gets far too verbose)
-                     if (!debug.enabled) {
-                        // Get the current team's constructor in its team colour
-                        let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
-
+                     if (!debug.enabled) { // If --debug is not enabled
                         if (stats.counters.totalTeams % global.settings.progressInterval === 0) { // Only update screen spinner every nth team analysed
-                           // Update the spinner progress text
+
+                           // Get the current team's constructor in its team colour
+                           let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
+
+                           // Compose the constructor and drivers from the current team being analysed
                            let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
-                           spinnerText += ` [${stats.counters.totalTeams} teams]`; // Append the total number of teams analysed thus far
+
+                           // Get the number of teams analysed so far
+                           let teamsAnalysed = `${stats.counters.totalTeams}`;
+
+                           // Get the required number of characters to right-align the team counter
+                           let paddingCount = process.stdout.columns - (spinnerText.length + teamsAnalysed.length);
+                           let padding = global.settings.paddingChar.repeat(paddingCount);
+
+                           // Append to the spinner text
+                           spinnerText += `${padding}${teamsAnalysed}`;
+
+                           // Update the spinner progress text
                            spinnerProgress.text = spinnerText;
+                           // Force a screen paint
                            spinnerProgress.render();
                         }
                      }
