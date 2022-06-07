@@ -28,6 +28,7 @@ module.exports = {
         console.log('   ' + 'node ff1.js [options]');
         console.log(endOfLine);
         console.log(chalk.grey('OPTIONS:'));
+        console.log('   ' + '--worst                       ' + chalk.grey('Displays the team with the worst points tally instead of the best'));
         console.log('   ' + '--year <nnnn>                 ' + chalk.grey('Override the default season. Default:', date.toString()));
         console.log('   ' + '--budget <nnn>                ' + chalk.grey('Override the default budget cap. Default: 100'));
         console.log('   ' + '--progressinterval <n>        ' + chalk.grey('Update analysis progress every nth team. Default: 5'));

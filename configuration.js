@@ -29,7 +29,8 @@ function getSettings() {
         httpMethod: 'GET',
         httpOptions: {},
         progressInterval: 5,
-        paddingChar: ' '
+        paddingChar: ' ',
+        reportBestTeam: true
     };
 
     try {
@@ -72,6 +73,11 @@ function getSettings() {
         // Check for '--verbose' argument
         if (argv.verbose) {
             settings.verbose = true;
+        }
+
+        // Check for `--worst` or `--worstteam` argument
+        if ((argv.worst) || (argv.worstteam)) {
+            settings.reportBestTeam = false;
         }
 
         return settings;

@@ -24,19 +24,24 @@ const columnify = require('columnify');
 
 // Initialise statistics object
 const statistics = require('./statistics');
-const { argv } = require('process');
 const stats = statistics.initialise();
 
+// Object to store potential teams
 const savedTeams = {
    best: {
       points: 0,
       teams: []
    },
    worst: {
-      points: 0,
+      points: null,
       teams: []
    }
 
+};
+
+const registerTeamType = {
+   best: 0,
+   worst: 1
 };
 
 /* https://medium.com/swlh/how-to-round-to-a-certain-number-of-decimal-places-in-javascript-ed74c471c1b8 */
@@ -150,23 +155,42 @@ function tallyCurrentTeam(currentTeam, callback) {
    callback(result);
 }
 
-function registerTeam(currentTeam) {
+function registerTeam(currentTeam, teamType) {
    debug('registerTeam():Entry');
 
-   // Check if we're replacing the existing best team or adding this team to the list because they're tied on points
-   if (currentTeam.tallyResults.totalPoints > savedTeams.best.points) {          // We have a team with a better points total
-      debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${savedTeams.best.teams.length} which had ${savedTeams.best.points}`);
-      savedTeams.best.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
-      savedTeams.best.teams = [];                                                // Remove existing best team(s)
-      savedTeams.best.teams.push(currentTeam);                                   // Record new best team
-   } else if (currentTeam.tallyResults.totalPoints === savedTeams.best.points) { // We have a team with an equal points total
-      debug(`new team is being added to previous ${savedTeams.best.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
-      savedTeams.best.teams.push(currentTeam);                                   // Append this team to the `teams` array
+   if (teamType === registerTeamType.worst) { // Register a potential `worst` team
+
+      debug('Registering a potential worst team');
+      // Check if we're replacing the existing worst team or adding this team to the list because they're tied on points
+      if ((currentTeam.tallyResults.totalPoints < savedTeams.worst.points) || (savedTeams.worst.points === null)) {          // We have a team with a worse points total
+         debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${savedTeams.worst.teams.length} which had ${savedTeams.worst.points}`);
+         savedTeams.worst.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
+         savedTeams.worst.teams = [];                                                // Remove existing best team(s)
+         savedTeams.worst.teams.push(currentTeam);                                   // Record new best team
+      } else if (currentTeam.tallyResults.totalPoints === savedTeams.worst.points) { // We have a team with an equal points total
+         debug(`new team is being added to previous ${savedTeams.worst.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
+         savedTeams.worst.teams.push(currentTeam);                                   // Append this team to the `teams` array
+      }
+
+   } else { // Register a potential `best` team
+
+      debug('Registering a potential best team');
+      // Check if we're replacing the existing best team or adding this team to the list because they're tied on points
+      if (currentTeam.tallyResults.totalPoints > savedTeams.best.points) {          // We have a team with a better points total
+         debug(`new team with ${currentTeam.tallyResults.totalPoints} points is replacing the previous ${savedTeams.best.teams.length} which had ${savedTeams.best.points}`);
+         savedTeams.best.points = currentTeam.tallyResults.totalPoints;             // Update the best points total
+         savedTeams.best.teams = [];                                                // Remove existing best team(s)
+         savedTeams.best.teams.push(currentTeam);                                   // Record new best team
+      } else if (currentTeam.tallyResults.totalPoints === savedTeams.best.points) { // We have a team with an equal points total
+         debug(`new team is being added to previous ${savedTeams.best.teams.length} as they share a points tally of ${currentTeam.tallyResults.totalPoints}`);
+         savedTeams.best.teams.push(currentTeam);                                   // Append this team to the `teams` array
+      }
    }
 }
 
 function displayStatistics() {
    debug('displayStatistics()::Entry');
+   console.log(newLine);
    console.log(chalk.underline('Statistics:'));
 
    let statisticsOutput = [
@@ -185,26 +209,20 @@ function displayStatistics() {
    });
 
    console.log(statisticsColumns);
-   console.log(newLine);
 }
 
-function displayBestTeam() {
-   console.log(newLine); // Separation from previous output
-   if (savedTeams.best.teams.length > 1) {
-      console.log(chalk.whiteBright(`There are ${savedTeams.best.teams.length} optimal teams with ${savedTeams.best.points} points:`));
-   }
+function displaySavedTeam(savedTeam) {
+   savedTeam.teams.forEach(team => {
+      let teamOutput = []; // Initialise output array
 
-   savedTeams.best.teams.forEach(team => {
-      let bestTeamOutput = []; // Initialise output array
-
-      bestTeamOutput.push({ // Add Constructor
+      teamOutput.push({ // Add Constructor
          name: formatting.applyTeamColours(team.constructor.display_name, team.constructor.team_abbreviation),
          points: formatting.applyTeamColours(team.constructor.season_score, team.constructor.team_abbreviation),
          cost: formatting.applyTeamColours(team.constructor.price, team.constructor.team_abbreviation)
       });
 
       team.drivers.forEach(driver => { // Add Drivers
-         bestTeamOutput.push({ // Add Constructor
+         teamOutput.push({ // Add Constructor
             name: formatting.applyTeamColours(driver.display_name, driver.team_abbreviation),
             points: formatting.applyTeamColours(driver.season_score, driver.team_abbreviation),
             cost: formatting.applyTeamColours(driver.price, driver.team_abbreviation),
@@ -214,13 +232,13 @@ function displayBestTeam() {
       });
 
       // Add totals row
-      bestTeamOutput.push({
+      teamOutput.push({
          name: '',
          points: chalk.bold(team.tallyResults.totalPoints),
          cost: chalk.bold(team.tallyResults.totalPrice)
       });
 
-      let bestTeamColumns = columnify(bestTeamOutput, {
+      let teamColumns = columnify(teamOutput, {
          columnSplitter: ' | ',
          config: {
             qualifyingTop10Streak: {
@@ -234,7 +252,7 @@ function displayBestTeam() {
          }
       });
 
-      console.log(bestTeamColumns);
+      console.log(teamColumns);
       console.log(newLine);
    });
 }
@@ -289,7 +307,7 @@ function performAnalysis(f1data) {
                            let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
 
                            // Compose the constructor and drivers from the current team being analysed
-                           let spinnerText = spinnerProgress.text = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                           let spinnerText = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
 
                            // Get the number of teams analysed so far
                            let teamsAnalysed = `${stats.counters.totalTeams}`;
@@ -315,11 +333,16 @@ function performAnalysis(f1data) {
                            if (tallyResults.overBudget) { // Check if the team was over budget
                               stats.counters.overBudget++;
                            } else {
-                              // Team is within budget
+                              // Team is within budget; Record the tally results
+                              currentTeam.tallyResults = tallyResults;
                               if (tallyResults.totalPoints >= savedTeams.best.points) {
-                                 // We've got a contender for best team. Append the results and process its potential
-                                 currentTeam.tallyResults = tallyResults;
-                                 registerTeam(currentTeam);
+                                 // We've got a contender for best team
+                                 registerTeam(currentTeam, registerTeamType.best);
+                              }
+
+                              if ((tallyResults.totalPoints <= savedTeams.worst.points) || (savedTeams.worst.points === null)) {
+                                 // We've got a contender for worst team
+                                 registerTeam(currentTeam, registerTeamType.worst);
                               }
                            }
                         });
@@ -343,11 +366,35 @@ function performAnalysis(f1data) {
       spinnerProgress.succeed(`Analysed ${stats.counters.analysedTeams} team combinations in ${duration}`);
    }
 
-   if (argv.verbose) {
+   if (global.settings.verbose) { // Display statistics if `--verbose` argument is present
       displayStatistics();
    }
 
-   displayBestTeam();
+   console.log(newLine); // Separation from previous output
+
+   if (global.settings.reportBestTeam) { // We're reporting the best team(s) found
+      if (savedTeams.best.teams.length === 1) {
+
+         console.log(chalk.whiteBright(`There is one optimal team with ${savedTeams.best.points} points:`));
+
+      } else {
+
+         console.log(chalk.whiteBright(`There are ${savedTeams.best.teams.length} optimal teams with ${savedTeams.best.points} points:`));
+      }
+      displaySavedTeam(savedTeams.best);
+
+   } else { // We're reporting on the worst team(s) found
+      if (savedTeams.worst.teams.length === 1) {
+
+         console.log(chalk.whiteBright(`There is one worst team with ${savedTeams.worst.points} points (${savedTeams.best.points - savedTeams.worst.points} behind the best):`));
+
+      } else {
+
+         console.log(chalk.whiteBright(`There are ${savedTeams.worst.teams.length} optimal teams with ${savedTeams.worst.points} points:`));
+      }
+      displaySavedTeam(savedTeams.worst);
+
+   }
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };

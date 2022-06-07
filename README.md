@@ -51,6 +51,11 @@ ff1 [options]
 
 There are a few command line options you can use:
 
+### worst
+
+`--worst` or `--worstteam` displays the Fantasy F1 team with the worst points tally, instead of displaying the best.
+This might be more interesting than actually useful.
+
 ### year
 
 `--year <nnnn>`

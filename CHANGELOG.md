@@ -2,7 +2,9 @@
 
 ## v1.3.0 - TBC
 
-* Added a right-align count of the number of teams analysed so far to the progress spinner text.
+* Added a right-aligned count of the number of teams analysed so far to the progress spinner text.
+* Fixed an issue where `--verbose` didn't display the analysis statistics.
+* Added the argument `--worst` to display the team with the worst points tally instead.
 
 ---
 
