@@ -21,7 +21,7 @@ function displayCurrentStandings(f1dataset) {
     let summary = [];
 
     // Loop through the Drivers & Constructors creating two columns (for the first 10 rows, then we run out of Constructors)
-    for (let i = 0; i < drivers.length - 1; i++) {
+    for (let i = 0; i < drivers.length; i++) {
         let row = {
             constructor: formatting.applyTeamColours(constructors[i]?.display_name, constructors[i]?.team_abbreviation),
             constructorPoints: formatting.applyTeamColours(constructors[i]?.season_score, constructors[i]?.team_abbreviation),
@@ -37,10 +37,10 @@ function displayCurrentStandings(f1dataset) {
         columnSplitter: ' | ',
         config: {
             constructorPoints: {
-                headingTransform: () => {return('POINTS')}
+                headingTransform: () => { return ('POINTS') }
             },
             driverPoints: {
-                headingTransform: () => {return('POINTS')}
+                headingTransform: () => { return ('POINTS') }
             }
         }
     });

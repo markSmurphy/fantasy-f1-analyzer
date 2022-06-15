@@ -267,7 +267,7 @@ function performAnalysis(f1data) {
    }
 
    // Analyse each constructor against all driver lineups
-   for (let i = 0; i <= f1data.constructors.length - 1; i++) {
+   for (let i = 0; i < f1data.constructors.length; i++) {
 
       for (let driver1 = 0; driver1 <= 15; driver1++) {
          // Iterate through each driver in turn

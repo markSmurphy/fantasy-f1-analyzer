@@ -1,5 +1,13 @@
 # Change Log
 
+## v1.3.1 - 15<sup>th</sup> June 2022
+
+### Bug Fix
+
+* The initial list of drivers, in descending points order, now includes the last (20th) placed driver.
+
+---
+
 ## v1.3.0 - 7<sup>th</sup> June 2022
 
 * Added a right-aligned count of the number of teams analysed so far to the progress spinner text.
