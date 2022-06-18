@@ -83,5 +83,11 @@ function processResponse(data) {
     summary.displayCurrentStandings(f1dataset);
 
     // Analyse the latest Fantasy F1 data
-    analysis.performAnalysis(f1dataset);
+    let results = analysis.performAnalysis(f1dataset);
+
+    // Export to a file
+    if (global.settings.export) {
+        const exportResults = require('./export');
+        exportResults.exportToFile(results.best, global.settings.exportFilename);
+    }
 }

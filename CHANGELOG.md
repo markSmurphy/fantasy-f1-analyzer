@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.4.0 - 18<sup>th</sup> June 2022
+
+* Added an option to export the results to a CSV file.
+
+---
+
 ## v1.3.1 - 15<sup>th</sup> June 2022
 
 ### Bug Fix

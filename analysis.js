@@ -222,7 +222,7 @@ function displaySavedTeam(savedTeam) {
       });
 
       team.drivers.forEach(driver => { // Add Drivers
-         teamOutput.push({ // Add Constructor
+         teamOutput.push({
             name: formatting.applyTeamColours(driver.display_name, driver.team_abbreviation),
             points: formatting.applyTeamColours(driver.season_score, driver.team_abbreviation),
             cost: formatting.applyTeamColours(driver.price, driver.team_abbreviation),
@@ -395,6 +395,8 @@ function performAnalysis(f1data) {
       displaySavedTeam(savedTeams.worst);
 
    }
+
+   return(savedTeams);
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };

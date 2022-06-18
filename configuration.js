@@ -30,7 +30,9 @@ function getSettings() {
         httpOptions: {},
         progressInterval: 5,
         paddingChar: ' ',
-        reportBestTeam: true
+        reportBestTeam: true,
+        export: false,
+        exportFilename: ''
     };
 
     try {
@@ -78,6 +80,18 @@ function getSettings() {
         // Check for `--worst` or `--worstteam` argument
         if ((argv.worst) || (argv.worstteam)) {
             settings.reportBestTeam = false;
+        }
+
+        if (argv.export) {
+            debug('"--export" argument detected');
+            // Check that a string was passed along with "--export"
+            if (typeof (argv.export) === 'string') {
+                debug('The --export parameter was passed [%s] which is type "string"', argv.export);
+                settings.export=true;
+                settings.exportFilename = argv.export;
+            } else {
+                console.log(chalk.blue('Ignoring "--export" because it must be accompanied by a filename. i.e. --export <filename>'));
+            }
         }
 
         return settings;

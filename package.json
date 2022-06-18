@@ -40,6 +40,7 @@
     "columnify": "^1.6.0",
     "debug": "^4.3.4",
     "figlet": "^1.5.2",
+    "jsonexport": "^3.2.0",
     "needle": "^3.1.0",
     "ora": "^5.4.1",
     "supports-color": "^9.2.2",

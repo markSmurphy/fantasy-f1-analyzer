@@ -51,12 +51,24 @@ ff1 [options]
 
 There are a few command line options you can use:
 
-### worst
+```text
+   --export <filename>           Exports the results to the specified filename
+   --year <nnnn>                 Override the default season. Default: 2022
+   --budget <nnn>                Override the default budget cap. Default: 100
+   --worst                       Displays the team with the worst points tally instead of the best
+   --progressinterval <n>        Update analysis progress every nth team. Default: 5
+   --verbose                     Enables verbose output.
+   --debug                       Enables debugging output.
+   --no-color                    Switches off colour output.
+   --version                     Display version number.
+   --help                        Display help screen.
+```
 
-`--worst` displays the Fantasy F1 team with the worst points tally, instead of displaying the best.
-This might be more interesting than actually useful.
+### export
 
-![worst team output](./images/worstTeamOutput.png)
+`--export <filename>`
+
+The **export** option allows you write the results to the specific `filename`. The output format the `CSV` and `filename` will be automatically appended with `.csv` if needed.
 
 ### year
 
@@ -73,6 +85,13 @@ Default: The current date's four digit year (e.g. `2022`).
 Specifies the budget cap in case there's a need to override the default.
 
 Default: `100`.
+
+### worst
+
+`--worst` displays the Fantasy F1 team with the worst points tally, instead of displaying the best.
+This might be more interesting than actually useful.
+
+![worst team output](./images/worstTeamOutput.png)
 
 ### progress interval
 
