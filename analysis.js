@@ -101,9 +101,14 @@ function doesArrayHaveDuplicates(sourceArray) {
    let duplicates = []; // Initialise array to hold copy of duplicates
    sourceArray.forEach((el, i) => { // Loop through array
       sourceArray.forEach((element, index) => { // Loop through whole array once per element in array
-         if (i === index) return null; // Make sure we're not comparing the same element
+         if (i === index) { // Make sure we're not comparing the same element
+            return (null);
+         }
+
          if (element.display_name === el.display_name) { // Elements are different, so do they share the same display name?
-            if (!duplicates.includes(el)) duplicates.push(el); // The same display name occurs in two elements. Make a copy of the duplicate
+            if (!duplicates.includes(el)) {
+               duplicates.push(el); // The same display name occurs in two elements. Make a copy of the duplicate
+            }
          }
       });
    });
@@ -139,7 +144,7 @@ function tallyCurrentTeam(currentTeam, callback) {
       totalPoints += driver.season_score;
       totalPrice += driver.price;
       prices.push(driver.price);
-   })
+   });
 
    // Round the total price to one decimal place
    let totalPriceRounded = round(totalPrice, 1);
@@ -150,7 +155,7 @@ function tallyCurrentTeam(currentTeam, callback) {
       totalPriceUnrounded: totalPrice,
       overBudget: totalPrice > global.settings.budgetCap ? true : false,
       prices: prices
-   }
+   };
 
    callback(result);
 }
@@ -307,7 +312,7 @@ function performAnalysis(f1data) {
                            let currentConstructor = formatting.applyTeamColours(currentTeam.constructor.display_name, currentTeam.constructor.team_abbreviation);
 
                            // Compose the constructor and drivers from the current team being analysed
-                           let spinnerText = 'Analysing ' + currentConstructor + ': ' + currentTeam.drivers.map(e => e.last_name).join(' | ');
+                           let spinnerText = `Analysing ${currentConstructor}: ${currentTeam.drivers.map(e => e.last_name).join(' | ')}`;
 
                            // Get the number of teams analysed so far
                            let teamsAnalysed = `${stats.counters.totalTeams}`;
@@ -396,7 +401,7 @@ function performAnalysis(f1data) {
 
    }
 
-   return(savedTeams);
+   return (savedTeams);
 }
 
 module.exports = { getConstructors, getDrivers, performAnalysis };

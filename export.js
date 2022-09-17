@@ -46,7 +46,7 @@ function extractDetails(dataset, callback) {
 
 function exportToFile(dataset, filename) {
    // Check if the filename provided ends with ".csv"
-   if (filename.substr(filename.length - 4).toLowerCase() != '.csv') {
+   if (filename.substr(filename.length - 4).toLowerCase() !== '.csv') {
       // It doesn't end with ".csv" so appended the file extension
       filename = `${filename}.csv`;
    }
@@ -55,7 +55,7 @@ function exportToFile(dataset, filename) {
       jsonexport(exportData, (err, csv) => { // Convert JSON to CSV
 
          if (err) { // Check for an error
-            console.error(chalk.redBright('An error occurred converting the results into a CSV format: ') + '%O', err);
+            console.error(`${chalk.redBright('An error occurred converting the results into a CSV format: ')}%O`, err);
          } else {
             // Write the results to file
             try {
@@ -67,7 +67,7 @@ function exportToFile(dataset, filename) {
                console.log(newLine); // New line
             } catch (error) {
                debug('An error occurred writing to results to disk.');
-               console.error(chalk.redBright('An error occurred writing to the file [%s]: ') + '%O', filename, error);
+               console.error(`${chalk.redBright('An error occurred writing to the file [%s]: ')}%O`, filename, error);
             }
          }
       });

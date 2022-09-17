@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.4.1 - 17<sup>th</sup> September 2022
+
+* Updated dependencies.
+* Implemented [Rome](https://rome.tools/) linter suggestions.
+
+---
+
 ## v1.4.0 - 18<sup>th</sup> June 2022
 
 * Added an option to export the results to a CSV file.

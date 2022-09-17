@@ -13,7 +13,7 @@ const chalk = require('chalk');
 https://fantasy-api.formula1.com/f1/2022/teams
 https://fantasy-api.formula1.com/f1/2022/players
 https://fantasy-api.formula1.com/f1/2022/circuits
- */
+*/
 
 function getSettings() {
     debug('getSettings():Entry');
@@ -87,7 +87,7 @@ function getSettings() {
             // Check that a string was passed along with "--export"
             if (typeof (argv.export) === 'string') {
                 debug('The --export parameter was passed [%s] which is type "string"', argv.export);
-                settings.export=true;
+                settings.export = true;
                 settings.exportFilename = argv.export;
             } else {
                 console.log(chalk.blue('Ignoring "--export" because it must be accompanied by a filename. i.e. --export <filename>'));

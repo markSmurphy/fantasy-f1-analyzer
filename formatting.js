@@ -6,51 +6,61 @@ const chalk = require('chalk');
 
 function applyTeamColours(text, team_abbreviation) {
    // Handle missing team_abbreviation
-   if (team_abbreviation == undefined) {
+   if (team_abbreviation === undefined) {
       return (text);
    } else {
       let response = '';
 
       switch (team_abbreviation.toUpperCase()) {
-         case 'MER':
+         case 'MER': {
             response = chalk.cyanBright(text);
             break;
+         }
 
-         case 'AST':
+         case 'AST': {
             response = chalk.greenBright(text);
             break;
+         }
 
-         case 'RED':
+         case 'RED': {
             response = chalk.blue(text);
             break;
+         }
 
-         case 'HAA':
+         case 'HAA': {
             response = chalk.whiteBright(text);
             break;
+         }
 
-         case 'ALP':
+         case 'ALP': {
             response = chalk.blueBright(text);
             break;
+         }
 
-         case 'FER':
+         case 'FER': {
             response = chalk.red(text);
             break;
+         }
 
-         case 'ALT':
+         case 'ALT': {
             response = chalk.grey(text);
             break;
+         }
 
-         case 'WIL':
+         case 'WIL': {
             response = chalk.cyan(text);
             break;
+         }
 
-         case 'MCL':
+         case 'MCL': {
             response = chalk.yellow(text);
             break;
+         }
 
-         case 'ALF':
+         case 'ALF': {
             response = chalk.magenta(text);
             break;
+         }
 
          default:
             // Return the original text unaltered by default

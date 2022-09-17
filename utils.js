@@ -12,11 +12,11 @@ function formatBytes(bytes, decimals = 2) {
 
             const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
         }
     } catch (error) {
         debug('formatBytes() caught an exception: %O', error);
-        return (bytes + ' Bytes');
+        return (`${bytes} Bytes`);
     }
 }
 
@@ -29,11 +29,11 @@ function secondsToHms(seconds) {
             var m = Math.floor(seconds % 3600 / 60);
             var s = Math.floor(seconds % 3600 % 60);
 
-            return ('0' + h).slice(-2) + ' hours, ' + ('0' + m).slice(-2) + ' minutes, ' + ('0' + s).slice(-2) + ' seconds';
+            return `${(`0${h}`).slice(-2)} hours, ${(`0${m}`).slice(-2)} minutes, ${(`0${s}`).slice(-2)} seconds`;
         } catch (error) {
             debug('secondsToHms() caught an exception: %O', error);
             // an unexpected error occurred; return the original value
-            return (seconds + ' seconds');
+            return (`${seconds} seconds`);
         }
     } else {
         return ('<invalid>');
@@ -52,26 +52,25 @@ function millisecondsToHms(milliseconds) {
             let returnString = '';
 
             if (h > 0) {
-                returnString = ('0' + h).slice(-2) + ' hours, ';
+                returnString = `${(`0${h}`).slice(-2)} hours, `;                    // Pad hours with a leading zero
             }
 
             if (m > 0) {
-                returnString = returnString + ('0' + m).slice(-2) + ' minutes, ';
+                returnString = `${returnString}${(`0${m}`).slice(-2)} minutes, `;   // Pad minutes with a leading zero
             }
 
             if (s > 0) {
-                if (s === 1) {
-                    returnString = returnString + ('0' + s).slice(-2) + ' second';
-                } else {
-                    returnString = returnString + ('0' + s).slice(-2) + ' seconds';
+                returnString = `${returnString}${(`0${s}`).slice(-2)} second`;      // Pad seconds with a leading zero
+                if (s > 1) {
+                    returnString = `${returnString}s`;                              // Pluralise seconds if there's more than one
                 }
             }
 
-            return returnString;
+            return (returnString);
         } catch (error) {
             debug('millisecondsToHms() caught an exception: %O', error);
             // an unexpected error occurred; return the original value
-            return (milliseconds + ' milliseconds');
+            return (`${milliseconds} milliseconds`);
         }
     } else {
         return ('<invalid>');
@@ -107,7 +106,7 @@ function generateUniqueFilename(extension) {
         if (extension) {
             // Prepend a dot '.' if there isn't one
             if ((extension.charAt(0) === '.') === false) {
-                extension = '.' + extension
+                extension = `.${extension}`
             }
         } else {
             extension = defaultExtension;
