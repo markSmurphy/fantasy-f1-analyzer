@@ -4,6 +4,7 @@
 
 * Updated dependencies.
 * Implemented [Rome](https://rome.tools/) linter suggestions.
+* Added validation of API response (some JSON fields changed from `number` to `string`).
 
 ---
 
