@@ -4,7 +4,7 @@
 
 * Updated dependencies.
 * Implemented [Rome](https://rome.tools/) linter suggestions.
-* Added validation of API response (some JSON fields changed from `number` to `string`).
+* Added validation of API response (some JSON fields in [fantasy-api.formula1.com](https://fantasy-api.formula1.com/f1/2022/players) changed from `number` to `string`) rendering `season_score` & `price` unusable, which I suspect was the purpose).
 
 ---
 
