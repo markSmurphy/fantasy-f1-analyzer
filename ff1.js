@@ -31,6 +31,9 @@ const config = require('./configuration');
 global.settings = config.getSettings();
 debug(`Using settings: ${global.settings}`);
 
+// API response validation functions
+const validation = require('./validate');
+
 // Write Title to console
 var figlet = require('figlet');
 console.log(figlet.textSync('Fantasy F1 Analyser', {
@@ -56,7 +59,12 @@ needle(global.settings.httpMethod, url, global.settings.httpOptions)
             process.exit();
 
         } else {
-            return processResponse(response.body);
+            validation.validateDataset(response.body).then(() => {
+                return processResponse(response.body);
+            }).catch((error) => {
+                console.error(chalk.red('Fatal Error:'));
+                console.error(error);
+            });
         }
     })
     .catch(function (error) {
