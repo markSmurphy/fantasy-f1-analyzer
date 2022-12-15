@@ -1,5 +1,9 @@
 # Change Log
 
+## v1.4.2 - TBC
+
+* Updated dependencies.
+
 ## v1.4.1 - 17<sup>th</sup> September 2022
 
 * Updated dependencies.
