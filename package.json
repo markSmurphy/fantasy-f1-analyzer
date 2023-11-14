@@ -39,7 +39,7 @@
     "chalk": "^4.1.2",
     "columnify": "^1.6.0",
     "debug": "^4.3.4",
-    "figlet": "^1.5.2",
+    "figlet": "^1.7.0",
     "jsonexport": "^3.2.0",
     "needle": "^3.1.0",
     "ora": "^5.4.1",
